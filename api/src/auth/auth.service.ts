@@ -22,14 +22,14 @@ export class AuthService {
       },
     });
     if (!user) {
-      return null;
+      return { token: null, id: null };
     }
 
     // https://github.com/buckutt/server/blob/master/src/controllers/services/login.js#L81
     const pwMatches = await bcrypt.compare(dto.password, user.pwdHash);
 
     if (!pwMatches) {
-      return null;
+      return { token: null, id: null };
     }
 
     return { token: await this.signToken(user.id, user.email), id: user.id };

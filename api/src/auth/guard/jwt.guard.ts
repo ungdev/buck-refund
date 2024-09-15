@@ -2,7 +2,7 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { IsPublic } from '../decorator/public.decorator';
-import { AppException, ERROR_CODE } from '../../../src/exceptions';
+import { AppException, ERROR_CODE } from '../../exceptions';
 import { Observable, firstValueFrom } from 'rxjs';
 
 @Injectable()

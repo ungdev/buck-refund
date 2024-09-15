@@ -9,9 +9,9 @@
     "pepsi35"
   ],
   "scripts": {
-    "dev": "next dev -p 8080",
-    "build": "next build",
-    "start": "next start -p 8080"
+    "dev": "env-cmd -f .env.dev -- next dev -p 8080",
+    "build": "env-cmd -f .env.prod -- next build",
+    "start": "env-cmd -f .env.prod -- next start -p 8080"
   },
   "devDependencies": {
     "sass": "^1.78.0",
