@@ -28,19 +28,3 @@ export const ApiAppErrorResponse = (error: ERROR_CODE, description = '') => {
   const ResponseDtoMixin = mixin(ResponseDto, `AppErrorResDto$${error}`);
   return applyDecorators(ApiResponses[`Api${toPascalCase}Response`]({ type: ResponseDtoMixin, description }));
 };
-
-// Credit : https://www.inextenso.dev/how-to-generate-generic-dtos-with-nestjs-and-swagger
-type Constructor<T = any> = new (...args: any[]) => T;
-export function paginatedResponseDto<TBase extends Constructor>(Base: TBase) {
-  class ResponseDto {
-    @ApiProperty({ description: 'Total number of items that where found' })
-    itemCount: number;
-
-    @ApiProperty({ description: 'Maximum number of items that can be sent back in a single request' })
-    itemsPerPage: number;
-
-    @ApiProperty({ isArray: true, type: Base })
-    items: InstanceType<TBase>[];
-  }
-  return mixin(ResponseDto, `${Base.name}$Paginated`); // This is important otherwise you will get always the same instance
-}
