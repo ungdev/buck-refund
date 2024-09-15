@@ -62,7 +62,7 @@ function IbanInput(
         Number.parseInt(bban.slice(10, -2).split('').map(numericTransform).join('')) * 3;
       const computedKey = (97 - (ribNumeric % 97)).toString().padStart(2, '0');
       return onEnter(
-        computedKey !== bban.slice(-2) ? IbanValidity.INVALID : IbanValidity.IBAN & IbanValidity.BBAN,
+        computedKey !== bban.slice(-2) ? IbanValidity.INVALID : IbanValidity.IBAN | IbanValidity.BBAN,
         workingIban,
       );
     }

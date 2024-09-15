@@ -20,6 +20,12 @@ export default {
   'dashboard.info.line2': 'Rentre ton IBAN pour débuter la procédure 👇',
   'dashboard.info.update': "Tu as changé d'avis et tu veux mettre à jour ton IBAN ?",
   'dashboard.iban.placeholder': 'Saisis ton IBAN ici',
+  'dashboard.iban.error.invalid':
+    "🤔 Hmm l'IBAN que tu as rentré n'est pas valide... Vérifie que tu n'as pas fait d'erreur en le saisissant !",
+  'dashboard.iban.error.balance_too_low':
+    'Désolé, ton solde est insuffisant pour effectuer un virement. Cela couterait trop cher au bde de te rembourser...',
+  'dashboard.iban.error.generic': "Impossible d'enregistrer ton IBAN... Réessaye plus tard",
+  'dashboard.iban.saved': "C'est tout bon, on a bien enregistré ton IBAN ☺️",
   'dashboard.disclaimer':
     "Une fois ta demande traitée, tu recevras un virement de la part de BDE UTT. Les délais de traitement peuvent varier. Ni BDE UTT ni UTT NET GROUP ne peuvent être tenus responsables en cas de problème et se réservent le droit de refuser un virement ou d'annuler la transaction.",
 } as const;

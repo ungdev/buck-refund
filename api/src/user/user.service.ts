@@ -48,7 +48,7 @@ export default class UsersService {
   }
 
   async setIban(userId: string, dto: UserSetIbanDto) {
-    const cryptedIban = publicEncrypt(this.config.CRYPTO_PUBLIC_KEY, Buffer.from(dto.iban, 'utf8')).toString('base64');
+    const cryptedIban = publicEncrypt(this.config.CRYPTO_PUBLIC_KEY, Buffer.from(dto.data, 'utf8')).toString('base64');
     return this.prisma.user.update({
       where: { id: userId },
       data: {

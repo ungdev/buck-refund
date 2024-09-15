@@ -1,8 +1,6 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 import { useAppSelector } from '@/lib/hooks';
 import { AppThunk } from '@/lib/store';
-import { API } from '@/api/api';
-import { SetIbanRequestDto } from '@/api/user/setIban';
 
 export interface UserSlice {
   firstName: string;
@@ -35,18 +33,5 @@ export function setIbanRegistered(): AppThunk {
 }
 
 export const useConnectedUser = () => useAppSelector((state) => state.user);
-
-export const registerIban =
-  (api: API, iban: string): AppThunk =>
-  (dispatch) =>
-    api
-      .put<SetIbanRequestDto>('/user/iban', {
-        data: iban,
-      })
-      .on('success', async () => {
-        dispatch(setIbanRegistered());
-      })
-      .on(401, (body) => console.error('Wrong credentials', body))
-      .on(400, (body) => console.error('Bad request', body));
 
 export default userSlice.reducer;

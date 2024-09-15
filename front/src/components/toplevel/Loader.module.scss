@@ -6,7 +6,7 @@
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: $background-light;
+  background-color: $background-dark;
   z-index: 1100;
   display: flex;
   justify-content: center;
@@ -17,7 +17,7 @@
     width: 100px;
     height: 100px;
     transform-origin: 50% 65%;
-    fill: $buck-dark-blue;
+    fill: $background-light;
     animation:
       pulse 0.5s infinite alternate 0.5s,
       appearSmooth 0.5s;

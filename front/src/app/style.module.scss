@@ -73,6 +73,16 @@
       margin-bottom: 20px;
     }
 
+    .accepted {
+      display: block;
+      background-color: $valid-background;
+      color: $valid-text;
+      padding: 0.5em;
+      border-radius: 5px;
+      border: 1px solid $valid-text;
+      margin-bottom: 20px;
+    }
+
     .disclaimer {
       text-transform: uppercase;
       margin-top: 20px;

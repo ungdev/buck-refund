@@ -3,14 +3,21 @@
 import { useAppTranslation } from '@/lib/i18n';
 import styles from './style.module.scss';
 import { usePageSettings } from '@/module/pageSettings';
-import { useConnectedUser } from '@/module/user';
-import IbanInput from '@/components/IbanInput';
+import { setIbanRegistered, useConnectedUser } from '@/module/user';
+import IbanInput, { IbanValidity } from '@/components/IbanInput';
 import Link from '@/components/UI/Link';
+import { useState } from 'react';
+import { useAppDispatch } from '@/lib/hooks';
+import { useAPI } from '@/api/api';
+import { SetIbanRequestDto } from '@/api/user/setIban';
 
 export default function HomePage() {
   usePageSettings({ needsLoading: false });
   const { t } = useAppTranslation();
   const user = useConnectedUser();
+  const dispatch = useAppDispatch();
+  const api = useAPI();
+  const [ibanErrorMessage, setIbanErrorMessage] = useState<string | null>(null);
 
   return (
     <div className={styles.page}>
@@ -38,7 +45,43 @@ export default function HomePage() {
               <br />
               {t('common:dashboard.info.line2')}
             </div>
-            <IbanInput className={styles.iban} placeholder={t('common:dashboard.iban.placeholder')} />
+            {ibanErrorMessage !== null && (
+              <div className={ibanErrorMessage === '' ? styles.accepted : styles.warn}>
+                {ibanErrorMessage || t('common:dashboard.iban.saved')}
+              </div>
+            )}
+            <IbanInput
+              className={styles.iban}
+              placeholder={t('common:dashboard.iban.placeholder')}
+              onEnter={(valid, value) => {
+                if (valid === IbanValidity.INVALID) {
+                  setIbanErrorMessage(t('common:dashboard.iban.error.invalid'));
+                  return;
+                }
+                dispatch((dispatch) =>
+                  api
+                    .put<SetIbanRequestDto, { errorCode?: number }>('/user/iban', {
+                      data: value,
+                    })
+                    .on('success', async () => {
+                      dispatch(setIbanRegistered());
+                      setIbanErrorMessage('');
+                    })
+                    .on(401, (body) =>
+                      setIbanErrorMessage(
+                        t(
+                          body.errorCode === 2103
+                            ? 'common:dashboard.iban.error.invalid'
+                            : body.errorCode === 2104
+                              ? 'common:dashboard.iban.error.balance_too_low'
+                              : 'common:dashboard.iban.error.generic',
+                        ),
+                      ),
+                    )
+                    .on('error', () => setIbanErrorMessage(t('common:dashboard.iban.error.generic'))),
+                );
+              }}
+            />
             <div className={styles.disclaimer}>{t('common:dashboard.disclaimer')}</div>
           </>
         ) : (

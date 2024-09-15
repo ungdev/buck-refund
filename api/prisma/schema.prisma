@@ -13,5 +13,5 @@ model User {
   pwdHash   String
   firstName String
   balance   Int
-  iban      String?
+  iban      String? @db.Text
 }

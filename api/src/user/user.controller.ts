@@ -23,7 +23,8 @@ export default class UsersController {
         ERROR_CODE.USER_BALANCE_TOO_LOW,
         (this.config.BALANCE_MIN_VALUE / 100).toLocaleString('fr-FR', { currency: 'EUR', style: 'currency' }),
       );
-    if (!this.usersService.isValidIban(dto.iban)) throw new AppException(ERROR_CODE.IBAN_INVALID);
+    if (!this.usersService.isValidIban(dto.data)) throw new AppException(ERROR_CODE.IBAN_INVALID);
     await this.usersService.setIban(user.id, dto);
+    return {};
   }
 }
