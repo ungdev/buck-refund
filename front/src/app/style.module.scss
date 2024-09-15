@@ -1,5 +1,109 @@
+@import '@/variables.scss';
+
 .page {
   width: 100%;
   height: 100%;
   position: relative;
+  background-color: $background-dark;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .mod {
+    justify-content: center;
+    padding: 30px 50px;
+    background-color: $background-light;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 1200px;
+
+    > * {
+      display: block;
+    }
+
+    .title {
+      font-size: 2.2rem;
+      color: $background-dark;
+
+      .bluePart {
+        color: $buck-light-green;
+      }
+    }
+
+    .balance {
+      margin: 20px 0;
+      font-size: 1.2em;
+
+      .value {
+        display: inline-block;
+        margin-left: 1ch;
+        color: $buck-dark-blue;
+      }
+
+      .ibanRegistered {
+        font-size: 0.8em;
+        text-transform: uppercase;
+
+        &.true {
+          color: $valid-text;
+        }
+        &.false {
+          color: $error-text;
+        }
+      }
+    }
+
+    .info {
+      display: block;
+      background-color: $background-light;
+      color: $background-dark;
+      padding: 0.5em;
+      border-radius: 5px;
+      border: 1px solid $background-dark;
+      margin-bottom: 20px;
+    }
+
+    .warn {
+      display: block;
+      background-color: $error-background;
+      color: $error-text;
+      padding: 0.5em;
+      border-radius: 5px;
+      border: 1px solid $error-text;
+      margin-bottom: 20px;
+    }
+
+    .disclaimer {
+      text-transform: uppercase;
+      margin-top: 20px;
+      font-size: 0.8em;
+      color: $buck-dark-blue;
+    }
+  }
+
+  .bottomNotes {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 20px;
+    color: $background-light;
+
+    & > :not(:first-child) {
+      position: relative;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        left: -15px;
+        top: 50%;
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background-color: $background-light;
+        transform: translate(50%, -50%);
+      }
+    }
+  }
 }

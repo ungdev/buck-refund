@@ -66,7 +66,7 @@ export class AuthController {
       throw new AppException(ERROR_CODE.INVALID_TOKEN_FORMAT);
     }
     const { valid, id } = this.authService.isTokenValid(match[1]);
-    const user = await this.authService.getUser(id);
+    const user = id ? await this.authService.getUser(id) : undefined;
     return {
       valid,
       currentBalance: user?.balance,

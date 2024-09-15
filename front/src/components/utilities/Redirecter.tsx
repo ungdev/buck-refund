@@ -13,7 +13,7 @@ type RouteRedirectionRules = {
 
 const redirectionRules: RouteRedirectionRules = {
   '/login': [{ condition: (state) => state.loggedIn, redirectTo: '/' }],
-  '/register': [{ condition: (state) => state.loggedIn, redirectTo: '/' }],
+  '/': [{ condition: (state) => !state.loggedIn, redirectTo: '/login' }],
 };
 
 export default function Redirecter() {

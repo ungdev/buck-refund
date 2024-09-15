@@ -32,8 +32,10 @@ export const enum ERROR_CODE {
   PARAM_TOO_LOW = 2016,
   PARAM_TOO_HIGH = 2017,
   PARAM_NOT_INT = 2018,
+  PARAM_NOT_ASCII = 2019,
   PARAM_DOES_NOT_MATCH_REGEX = 2102,
   IBAN_INVALID = 2103,
+  USER_BALANCE_TOO_LOW = 2104,
   FORBIDDEN_NOT_ENOUGH_PERMISSIONS = 3001,
   NO_TOKEN = 3002,
   INVALID_TOKEN_FORMAT = 3003,
@@ -122,12 +124,20 @@ export const ErrorData = Object.freeze({
     message: 'The following parameters must be integers: %',
     httpCode: HttpStatus.BAD_REQUEST,
   },
+  [ERROR_CODE.PARAM_NOT_ASCII]: {
+    message: 'The following parameters must be ascii: %',
+    httpCode: HttpStatus.BAD_REQUEST,
+  },
   [ERROR_CODE.PARAM_DOES_NOT_MATCH_REGEX]: {
     message: 'The following parameters must match the regex "%": %',
     httpCode: HttpStatus.BAD_REQUEST,
   },
   [ERROR_CODE.IBAN_INVALID]: {
     message: 'The provided IBAN is not a valid IBAN',
+    httpCode: HttpStatus.BAD_REQUEST,
+  },
+  [ERROR_CODE.USER_BALANCE_TOO_LOW]: {
+    message: 'Your balance must be higher than % to perform this action',
     httpCode: HttpStatus.BAD_REQUEST,
   },
   [ERROR_CODE.FORBIDDEN_NOT_ENOUGH_PERMISSIONS]: {

@@ -1,6 +1,8 @@
 import styles from './IbanInput.module.scss';
-import { FC, Ref, forwardRef, useState } from 'react';
+import { Ref, forwardRef, useState } from 'react';
 import Button from '@/components/UI/Button';
+import Icons from '@/icons';
+import { useAppTranslation } from '@/lib/i18n';
 
 export const enum IbanValidity {
   INVALID = 0b00,
@@ -14,17 +16,16 @@ function IbanInput(
     onEnter = () => {},
     placeholder,
     autoFocus = false,
-    icon: Icon,
   }: {
     className?: string;
     placeholder?: string;
     autoFocus?: boolean;
     onEnter?: (valid: IbanValidity, value: string) => void;
-    icon?: FC;
   },
   ref?: Ref<HTMLInputElement>,
 ) {
   const [iban, setIban] = useState('');
+  const { t } = useAppTranslation();
   const checkValidity = () => {
     const workingIban = iban.toUpperCase().replaceAll(/[^A-Z0-9]/g, '');
 
@@ -32,6 +33,7 @@ function IbanInput(
     if (workingIban.length < 14 || workingIban.length > 34) return onEnter(IbanValidity.INVALID, workingIban);
 
     // IBAN CHECK
+    if (!/^[A-Z]{2}\d{2}/.test(workingIban)) return onEnter(IbanValidity.INVALID, workingIban);
     const ibanNumeric = BigInt(
       (workingIban.slice(4) + workingIban.slice(0, 4))
         .split('')
@@ -68,22 +70,34 @@ function IbanInput(
     return onEnter(IbanValidity.IBAN, workingIban);
   };
 
+  const ibanify = (iban: string) => {
+    const raw = iban
+      .toUpperCase()
+      .replaceAll(/[^A-Z0-9]/g, '')
+      .split('');
+    const spaceCount = Math.ceil(raw.length / 4 - 1);
+    for (let i = spaceCount; i > 0; i--) {
+      // Add a space every 4 characters
+      raw.splice(i * 4, 0, ' ');
+    }
+    return raw.join('');
+  };
+
   return (
     <div className={`${styles.inputWrapper} ${className}`}>
       <input
         ref={ref}
-        onChange={(v) => setIban(v.target.value)}
+        onChange={(v) => setIban(ibanify(v.target.value))}
         onKeyDown={(e) => e.key === 'Enter' && checkValidity()}
         value={iban}
         placeholder={placeholder}
         type={'text'}
         autoFocus={autoFocus}
       />
-      {Icon && (
-        <Button noStyle onClick={() => checkValidity()} noTab>
-          <Icon />
-        </Button>
-      )}
+      <Button className={styles.button} onClick={() => checkValidity()}>
+        {t('common:dashboard.iban.save')}
+        <Icons.RightChevron />
+      </Button>
     </div>
   );
 }

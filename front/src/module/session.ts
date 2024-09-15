@@ -28,7 +28,7 @@ export const sessionSlice = createSlice({
 const { setToken: _setToken } = sessionSlice.actions;
 
 export const login =
-  (api: API, login: string, password: string): AppThunk =>
+  (api: API, login: string, password: string, cb: (error?: number) => void): AppThunk =>
   (dispatch) =>
     api
       .post<LoginRequestDto, LoginResponseDto>('auth/login', {
@@ -38,9 +38,15 @@ export const login =
       .on('success', async (body) => {
         dispatch(setToken(body.access_token));
         dispatch(setUser(body));
+        cb();
       })
-      .on(StatusCodes.UNAUTHORIZED, (body) => console.error('Wrong credentials', body))
-      .on(StatusCodes.BAD_REQUEST, (body) => console.error('Bad request', body));
+      .on(StatusCodes.UNAUTHORIZED, (body) => {
+        console.error('Wrong credentials', body);
+        cb(body.errorCode ?? StatusCodes.UNAUTHORIZED);
+      })
+      .on('error', () => {
+        cb(StatusCodes.INTERNAL_SERVER_ERROR);
+      });
 
 export const logout = (): AppThunk => (dispatch) => dispatch(setToken(null));
 

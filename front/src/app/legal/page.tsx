@@ -17,19 +17,16 @@ export default function LegalPage() {
   const DPO_NAME = 'Guillaume Etheve';
   const DPO_EMAIL = 'ung@utt.fr';
 
-  // Publication Director
-  const PUBLICATION_DIRECTOR = 'Alban Souchard de Lavoreille';
-
   // Updates
-  const LAST_TERMS_UPDATE = '02/04/2024';
-  const LAST_PRIVACY_POLICY_UPDATE = '02/04/2024';
+  const LAST_TERMS_UPDATE = '15/09/2024';
+  const LAST_PRIVACY_POLICY_UPDATE = '15/09/2024';
 
   return (
     <div id="legal" className={styles.legal}>
       <div className={styles.container}>
         Cette page a été mise à jour le {LAST_TERMS_UPDATE}.<h1>Mentions légales</h1>
         <p>
-          Le site web EtuUTT est développé, maintenu et hébergé par :<br />
+          Le site web BuckUTT est développé, maintenu et hébergé par :<br />
           <br />
           {ASSOCIATION_NAME}, association loi 1901
           <br />
@@ -42,8 +39,6 @@ export default function LegalPage() {
           {ASSOCIATION_PHONE}
           <br />
           <a href={`mailto:${ASSOCIATION_EMAIL}`}>{ASSOCIATION_EMAIL}</a>
-          <br />
-          Directeur de la publication : {PUBLICATION_DIRECTOR}
         </p>
         <h1>Conditions Générales d'Utilisation (CGU)</h1>
         {/* <h2 className={styles.articleTitle}>Collecte des données</h2>
@@ -289,7 +284,7 @@ export default function LegalPage() {
           L’utilisateur est invité à prendre connaissance de cette Politique à chaque fois qu’il utilise nos services,
           sans qu’il soit nécessaire de l’en prévenir formellement.
           <br />
-          La présente politique, éditée le 02/04/2024, a été mise à jour le {LAST_PRIVACY_POLICY_UPDATE}.
+          La présente politique, éditée le 15/09/2024, a été mise à jour le {LAST_PRIVACY_POLICY_UPDATE}.
         </p>
       </div>
     </div>

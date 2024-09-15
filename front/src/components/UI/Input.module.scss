@@ -1,15 +1,14 @@
 @import '@/variables';
 
-
 .inputWrapper {
   display: flex;
   border-radius: 10px;
-  border: 3px solid #D3D3D3;
-  background-color: #F0F0F2;
+  border: 3px solid #d3d3d3;
+  background-color: #f0f0f2;
 
   input {
-    background-color: #F0F0F2;
-    color: #444C5F;
+    background-color: #f0f0f2;
+    color: #444c5f;
     border-radius: 7px;
     padding: 10px 15px;
     border: none;
@@ -24,20 +23,19 @@
     height: 100%;
     width: 40px;
     padding: 5px 8px 5px 11px;
-    color: $ung-light-blue;
+    color: $buck-light-green;
   }
 
   &:focus-within {
-    background-color: $ung-light-blue;
-    border-color: $ung-light-blue;
+    background-color: $buck-light-green;
+    border-color: $buck-light-green;
 
     input {
-      color: $ung-light-blue;
+      color: $buck-light-green;
     }
 
     svg {
-      color: #F0F0F2;
+      color: #f0f0f2;
     }
   }
 }
-

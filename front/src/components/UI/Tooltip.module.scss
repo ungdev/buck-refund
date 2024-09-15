@@ -3,20 +3,22 @@
 .tooltipContainer {
   position: relative;
   display: inline-block;
+  cursor: help;
 
   & > .tooltip {
     display: none;
-    background-color: $ung-dark-grey;
+    background-color: $buck-light-green;
     position: absolute;
-    left: calc(100% + 6px);
-    top: 0.65em;
+    left: calc(100% + 1.5ch);
+    top: calc(50% + 0.1em);
     transform: translateY(-50%);
     border-radius: 4px;
     padding: 1px 4px;
     text-transform: uppercase;
     font-size: small;
     font-weight: bold;
-    color: $light-gray;
+    text-align: initial;
+    color: $background-dark;
     text-wrap: nowrap;
 
     &::before {
@@ -24,7 +26,7 @@
       width: 0;
       height: 0;
       border-top: 5px solid transparent;
-      border-right: 7px solid $ung-dark-grey;
+      border-right: 7px solid $buck-light-green;
       border-bottom: 5px solid transparent;
       left: -6px;
       position: absolute;

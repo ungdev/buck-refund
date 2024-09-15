@@ -3,46 +3,40 @@
 .authForm {
   justify-content: center;
   padding: 50px 50px 30px;
-  background-color: white;
+  background-color: $background-light;
   border-radius: 20px;
+  text-align: center;
 
   > * {
     display: block;
   }
 
   .logo {
-    height: 70px;
+    height: 100px;
+    margin: auto;
+  }
+
+  :has(.title) {
+    margin: 20px auto;
   }
 
   .title {
-    margin-top: 20px;
-    margin-bottom: 20px;
     font-size: 2rem;
-    color: $ung-dark-grey;
+    color: $background-dark;
 
     .bluePart {
-      color: $ung-light-blue;
+      color: $buck-light-green;
     }
   }
 
-  .cas {
-    border: 1px solid gray;
+  .error {
+    display: block;
+    background-color: $error-background;
+    color: $error-text;
+    padding: 0.5em;
     border-radius: 5px;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5rem;
-
-    svg {
-      width: 1.5rem;
-      height: 1.5rem;
-    }
-
-    &:hover {
-      background-color: #f1f1f1;
-      transition: all 0.2s ease-in-out;
-    }
+    border: 1px solid $error-text;
+    margin-bottom: 20px;
   }
 
   > span {
@@ -65,5 +59,12 @@
     width: 100%;
     margin: 30px 0 10px 0;
     cursor: pointer;
+  }
+
+  svg {
+    stroke: currentColor;
+    height: 1em;
+    width: 1em;
+    margin-right: 1ch;
   }
 }

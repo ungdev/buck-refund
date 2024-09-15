@@ -14,13 +14,13 @@
   color: var(--color);
 
   &.background-blue {
-    --background: #{$ung-light-blue};
+    --background: #{$buck-light-green};
     --color: white;
   }
 
   &.background-white {
     --background: white;
-    --color: #{$ung-dark-grey};
+    --color: #{$buck-dark-blue};
   }
 
   &:hover {
@@ -29,7 +29,7 @@
   }
 
   &:disabled {
-    background-color: grayscale($ung-light-blue);
+    background-color: grayscale($buck-light-green);
     cursor: not-allowed;
   }
 }
