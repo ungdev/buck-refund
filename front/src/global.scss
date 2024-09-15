@@ -1,0 +1,33 @@
+@import 'node_modules/modern-normalize/modern-normalize.css';
+
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;600&display=swap');
+@import '@/variables.scss';
+
+body {
+  margin: 0;
+  height: 100dvh;
+  min-height: 100%;
+  font-family: Lexend, Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-flow: row nowrap;
+}
+
+p, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+svg {
+  pointer-events: none;
+}
+
+h1 {
+  text-transform: uppercase;
+  color: $ung-dark-grey;
+  font-weight: 900;
+}
+

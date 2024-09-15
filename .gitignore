@@ -1,0 +1,11 @@
+.next/
+node_modules/
+
+next-env.d.ts
+
+
+# IDEs
+.idea/
+
+.env.dev
+.env.prod

@@ -1,0 +1,35 @@
+@import '@/variables';
+
+.button.noStyle {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.button:not(.noStyle) {
+  border: none;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: var(--background);
+  color: var(--color);
+
+  &.background-blue {
+    --background: #{$ung-light-blue};
+    --color: white;
+  }
+
+  &.background-white {
+    --background: white;
+    --color: #{$ung-dark-grey};
+  }
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--background) 90%, black);
+    cursor: pointer;
+  }
+
+  &:disabled {
+    background-color: grayscale($ung-light-blue);
+    cursor: not-allowed;
+  }
+}

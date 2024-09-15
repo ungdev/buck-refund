@@ -1,0 +1,36 @@
+@import '@/variables.scss';
+
+.loginPage {
+  width: 100%;
+  height: 100%;
+  background-color: #444c5f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bottomNotes {
+  position: absolute;
+  bottom: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 20px;
+  color: $light-gray;
+
+  & > :not(:first-child) {
+    position: relative;
+
+    &::before {
+      content: '';
+      display: inline-block;
+      position: absolute;
+      left: -15px;
+      top: 50%;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background-color: $light-gray;
+      transform: translate(50%, -50%);
+    }
+  }
+}

@@ -1,0 +1,15 @@
+@import '@/variables';
+
+.link.noStyle {
+  color: inherit;
+  text-decoration: none;
+}
+
+.link:not(.noStyle) {
+  color: $ung-light-blue;
+  text-decoration: none;
+
+  span {
+    border-bottom: 1px solid $ung-light-blue;
+  }
+}
