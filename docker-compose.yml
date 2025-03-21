@@ -1,0 +1,45 @@
+services:
+  db:
+    image: bitnami/mariadb
+    env_file: mariadb.env
+    ports:
+      - 3306:3306
+    volumes:
+      - debuck_data:/bitnami/mariadb
+    healthcheck:
+      test: ["CMD", "/opt/bitnami/scripts/mariadb/healthcheck.sh"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    env_file: api/.env.dev
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+  front:
+    build:
+      context: front
+      dockerfile: Dockerfile
+    env_file: front/.env.dev
+    ports:
+      - 80:80
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 15s
+      timeout: 5s
+      retries: 6
+
+volumes:
+  debuck_data:
+    driver: local
