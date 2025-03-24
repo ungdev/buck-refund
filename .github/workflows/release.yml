@@ -44,6 +44,10 @@ jobs:
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        env:
+          NEXT_PUBLIC_API_URL: '/api'
+          NEXT_PUBLIC_API_VERSION: 'v1'
+          NEXT_PUBLIC_API_REQUEST_TIMEOUT: 10000
         with:
           context: ${{ matrix.component }}
           push: true
