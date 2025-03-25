@@ -5,8 +5,11 @@ const USER_SELECT_FILTER = {
   select: {
     id: true,
     firstName: true,
+    lastName: true,
     balance: true,
     iban: true,
+    locker: true,
+    processed: true,
   },
   orderBy: [{ firstName: 'asc' }],
 } satisfies Partial<RequestType<'user'>>;
@@ -14,4 +17,4 @@ const USER_SELECT_FILTER = {
 export type User = Prisma.UserGetPayload<typeof USER_SELECT_FILTER>;
 
 export const generateCustomUserModel = (prisma: PrismaClient) =>
-  generateCustomModel(prisma, 'user', USER_SELECT_FILTER, (_, u) => u);
+  generateCustomModel(prisma, 'user', USER_SELECT_FILTER, (_, u: User) => u);

@@ -10,6 +10,37 @@ import { useState } from 'react';
 import { useAppDispatch } from '@/lib/hooks';
 import { useAPI } from '@/api/api';
 import { SetIbanRequestDto } from '@/api/user/setIban';
+import { GetLockerResponseDto } from '@/api/user/getLocker';
+
+function str2ab(str: string) {
+  const buf = new ArrayBuffer(str.length);
+  const bufView = new Uint8Array(buf);
+  for (let i = 0, strLen = str.length; i < strLen; i++) {
+    bufView[i] = str.charCodeAt(i);
+  }
+  return buf;
+}
+
+function importRsaKey(pemContents: string) {
+  const binaryDerString = atob(pemContents);
+  const binaryDer = str2ab(binaryDerString);
+  return window.crypto.subtle.importKey(
+    'spki',
+    binaryDer,
+    {
+      name: 'RSA-OAEP',
+      hash: 'SHA-256',
+    },
+    true,
+    ['encrypt'],
+  );
+}
+
+async function encryptIban(iban: string, pemEncodedKey: string): Promise<string> {
+  const key = await importRsaKey(pemEncodedKey);
+  const buffer = await crypto.subtle.encrypt({ name: 'RSA-OAEP' }, key, Buffer.from(iban, 'utf-8'));
+  return btoa(String.fromCodePoint(...new Uint8Array(buffer)));
+}
 
 export default function HomePage() {
   usePageSettings({ needsLoading: false });
@@ -53,16 +84,17 @@ export default function HomePage() {
             <IbanInput
               className={styles.iban}
               placeholder={t('common:dashboard.iban.placeholder')}
-              onEnter={(valid, value) => {
+              onEnter={async (valid, value) => {
                 if (valid === IbanValidity.INVALID) {
                   setIbanErrorMessage(t('common:dashboard.iban.error.invalid'));
                   return;
                 }
+                const lockerResponse = await api.post<never, GetLockerResponseDto>('/user/locker').toPromise();
+                if (!lockerResponse) return setIbanErrorMessage(t('common:dashboard.iban.error.generic'));
+                const data = await encryptIban(value, lockerResponse.data);
                 dispatch((dispatch) =>
                   api
-                    .put<SetIbanRequestDto, { errorCode?: number }>('/user/iban', {
-                      data: value,
-                    })
+                    .put<SetIbanRequestDto, { errorCode?: number }>('/user/iban', { data })
                     .on('success', async () => {
                       dispatch(setIbanRegistered());
                       setIbanErrorMessage('');

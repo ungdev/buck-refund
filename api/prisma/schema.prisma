@@ -12,6 +12,9 @@ model User {
   email     String @unique
   pwdHash   String
   firstName String
+  lastName  String
   balance   Int
+  processed Boolean @default(false)
   iban      String? @db.Text
+  locker    String? @db.Text
 }

@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import UserSetIbanDto from './dto/req/user-set-iban.dto';
 import { ConfigModule } from '../config/config.module';
-import { publicEncrypt } from 'crypto';
+import { generateKeyPairSync, privateDecrypt, publicEncrypt, constants } from 'crypto';
+import { User } from './interfaces/user.interface';
 
 @Injectable()
 export default class UsersService {
@@ -47,13 +47,70 @@ export default class UsersService {
     return true;
   }
 
-  async setIban(userId: string, dto: UserSetIbanDto) {
-    const cryptedIban = publicEncrypt(this.config.CRYPTO_PUBLIC_KEY, Buffer.from(dto.data, 'utf8')).toString('base64');
+  async setIban(userId: string, data: string) {
+    const cryptedIban = publicEncrypt(
+      { key: this.config.CRYPTO_PUBLIC_KEY, padding: constants.RSA_PKCS1_OAEP_PADDING, oaepHash: 'sha256' },
+      Buffer.from(data, 'utf8'),
+    ).toString('base64');
     return this.prisma.user.update({
       where: { id: userId },
       data: {
         iban: cryptedIban,
       },
     } as const);
+  }
+
+  public async createLocker(userId: string) {
+    const { publicKey, privateKey } = generateKeyPairSync('rsa', {
+      modulusLength: 4096,
+      publicKeyEncoding: {
+        type: 'spki',
+        format: 'pem',
+      },
+      privateKeyEncoding: {
+        type: 'pkcs8',
+        format: 'pem',
+        cipher: 'aes-256-cbc',
+        passphrase: this.config.LOCKER_SERVICE_KEY,
+      },
+    });
+
+    await this.prisma.user.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        locker: privateKey,
+      },
+    });
+    return publicKey.replaceAll(/\n|\r|-+[^-]+KEY-+/g, '');
+  }
+
+  public async consumeLocker(user: User, lockerData: string) {
+    let rawData: string = null;
+    try {
+      const decrypted = privateDecrypt(
+        {
+          key: user.locker,
+          passphrase: this.config.LOCKER_SERVICE_KEY,
+          padding: constants.RSA_PKCS1_OAEP_PADDING,
+          oaepHash: 'sha256',
+        },
+        Buffer.from(lockerData, 'base64'),
+      );
+      rawData = decrypted.toString('utf8');
+    } catch (e) {
+      console.warn(e);
+    } finally {
+      await this.prisma.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          locker: null,
+        },
+      });
+    }
+    return rawData;
   }
 }

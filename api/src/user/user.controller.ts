@@ -1,4 +1,4 @@
-import { Body, Controller, Put } from '@nestjs/common';
+import { Body, Controller, Post, Put } from '@nestjs/common';
 import { GetUser } from '../auth/decorator';
 import { User } from './interfaces/user.interface';
 import UsersService from './user.service';
@@ -17,14 +17,27 @@ export default class UsersController {
   @ApiOperation({ description: 'Sets the IBAN of the current user.' })
   @ApiOkResponse()
   @ApiAppErrorResponse(ERROR_CODE.IBAN_INVALID, 'The IBAN provided verification keys are not matching its content')
-  async getCurrentUser(@GetUser() user: User, @Body() dto: UserSetIbanDto) {
+  async setCurrentIban(@GetUser() user: User, @Body() dto: UserSetIbanDto) {
+    const data = await this.usersService.consumeLocker(user, dto.data);
+    if (!data) throw new AppException(ERROR_CODE.LOCKER_ERROR);
+    if (user.processed) throw new AppException(ERROR_CODE.ALREADY_PROCESSED);
     if (user.balance < 1)
       throw new AppException(
         ERROR_CODE.USER_BALANCE_TOO_LOW,
         (this.config.BALANCE_MIN_VALUE / 100).toLocaleString('fr-FR', { currency: 'EUR', style: 'currency' }),
       );
-    if (!this.usersService.isValidIban(dto.data)) throw new AppException(ERROR_CODE.IBAN_INVALID);
-    await this.usersService.setIban(user.id, dto);
+    if (!this.usersService.isValidIban(data)) throw new AppException(ERROR_CODE.IBAN_INVALID);
+    await this.usersService.setIban(user.id, data);
     return {};
+  }
+
+  @Post('/locker')
+  @ApiOperation({ description: 'Creates a locker instance' })
+  @ApiOkResponse()
+  @ApiAppErrorResponse(ERROR_CODE.IBAN_INVALID, 'The IBAN provided verification keys are not matching its content')
+  async getLocker(@GetUser() user: User) {
+    if (user.processed) throw new AppException(ERROR_CODE.ALREADY_PROCESSED);
+    const data = await this.usersService.createLocker(user.id);
+    return { data };
   }
 }

@@ -23,7 +23,7 @@ export const enum ERROR_CODE {
   PARAM_NOT_ENUM = 2007,
   PARAM_NOT_DATE = 2008,
   PARAM_NOT_UUID = 2009,
-  PARAM_TOO_LONG = 20010,
+  PARAM_TOO_LONG = 2010,
   PARAM_TOO_SHORT = 2011,
   PARAM_SIZE_TOO_SMALL = 2012,
   PARAM_SIZE_TOO_BIG = 2013,
@@ -34,12 +34,14 @@ export const enum ERROR_CODE {
   PARAM_NOT_INT = 2018,
   PARAM_NOT_ASCII = 2019,
   PARAM_DOES_NOT_MATCH_REGEX = 2102,
+  LOCKER_ERROR = 2202,
   IBAN_INVALID = 2103,
   USER_BALANCE_TOO_LOW = 2104,
   FORBIDDEN_NOT_ENOUGH_PERMISSIONS = 3001,
   NO_TOKEN = 3002,
   INVALID_TOKEN_FORMAT = 3003,
   INVALID_CREDENTIALS = 3004,
+  ALREADY_PROCESSED = 4001,
 }
 
 /**
@@ -132,6 +134,10 @@ export const ErrorData = Object.freeze({
     message: 'The following parameters must match the regex "%": %',
     httpCode: HttpStatus.BAD_REQUEST,
   },
+  [ERROR_CODE.LOCKER_ERROR]: {
+    message: 'Invalid locker used',
+    httpCode: HttpStatus.BAD_REQUEST,
+  },
   [ERROR_CODE.IBAN_INVALID]: {
     message: 'The provided IBAN is not a valid IBAN',
     httpCode: HttpStatus.BAD_REQUEST,
@@ -155,6 +161,10 @@ export const ErrorData = Object.freeze({
   [ERROR_CODE.INVALID_CREDENTIALS]: {
     message: 'Credentials incorrect',
     httpCode: HttpStatus.UNAUTHORIZED,
+  },
+  [ERROR_CODE.ALREADY_PROCESSED]: {
+    message: 'Your account has already been processed',
+    httpCode: HttpStatus.GONE,
   },
 } as const) satisfies Readonly<{
   [error in ERROR_CODE]: {

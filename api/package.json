@@ -14,7 +14,7 @@
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test,prisma,migration}/**/*.ts\" --fix",
     "db:reset": "pnpm dev:db:reset",
-    "db:editor": "env-cmd -f .env.dev -- pnpm prisma studio",
+    "db:push": "env-cmd -f .env.dev -- pnpm prisma db push",
     "dev:db:reset": "env-cmd -f .env.dev --use-shell \"pnpm prisma migrate reset --force && pnpm prisma db push\""
   },
   "dependencies": {
@@ -50,7 +50,7 @@
     "@types/jest": "29.5.0",
     "@types/multer": "^1.4.11",
     "@types/mysql": "^2.15.26",
-    "@types/node": "18.15.11",
+    "@types/node": "22.13.13",
     "@types/passport-jwt": "^3.0.13",
     "@types/pdfkit": "^0.13.4",
     "@typescript-eslint/eslint-plugin": "^5.62.0",

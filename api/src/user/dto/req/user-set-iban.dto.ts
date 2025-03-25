@@ -1,8 +1,7 @@
-import { IsString, MaxLength, MinLength } from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
 
 export default class UserSetIbanDto {
   @IsString()
-  @MaxLength(34)
-  @MinLength(14)
+  @MinLength(20)
   data: string;
 }

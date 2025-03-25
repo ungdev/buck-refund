@@ -24,6 +24,7 @@ export class ConfigModule {
   public readonly SALT_ROUNDS: number;
   public readonly CRYPTO_PUBLIC_KEY: string;
   public readonly BALANCE_MIN_VALUE: number;
+  public readonly LOCKER_SERVICE_KEY: string;
 
   // DEV ENVIRONMENT ONLY
 
@@ -38,6 +39,7 @@ export class ConfigModule {
     this.SALT_ROUNDS = Number(config.get('SALT_ROUNDS'));
     this.CRYPTO_PUBLIC_KEY = config.get('CRYPTO_PUBLIC_KEY');
     this.BALANCE_MIN_VALUE = Number(config.get('BALANCE_MIN_VALUE'));
+    this.LOCKER_SERVICE_KEY = config.get('LOCKER_SERVICE_KEY');
 
     this._FAKER_SEED = isTestEnv ? Number(config.get('FAKER_SEED')) : undefined;
   }
