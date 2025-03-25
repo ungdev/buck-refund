@@ -66,7 +66,9 @@ export default function HomePage() {
           </div>
           <div
             className={[styles.ibanRegistered, user?.paymentMethodRegistered ? styles.true : styles.false].join(' ')}>
-            {user?.paymentMethodRegistered ? t('common:dashboard.iban.yes') : t('common:dashboard.iban.no')}
+            {user?.paymentMethodRegistered
+              ? t('common:dashboard.iban.yes', { last4: user.paymentMethodRegistered })
+              : t('common:dashboard.iban.no')}
           </div>
         </div>
         {(user?.currentBalance ?? 0) > 0 ? (
@@ -96,7 +98,7 @@ export default function HomePage() {
                   api
                     .put<SetIbanRequestDto, { errorCode?: number }>('/user/iban', { data })
                     .on('success', async () => {
-                      dispatch(setIbanRegistered());
+                      dispatch(setIbanRegistered(value));
                       setIbanErrorMessage('');
                     })
                     .on(401, (body) =>
@@ -121,7 +123,7 @@ export default function HomePage() {
         )}
       </div>
       <div className={styles.bottomNotes}>
-        <div>© 2024 UTT NET GROUP</div>
+        <div>© 2025 UTT NET GROUP</div>
         <div>BuckUTT</div>
         <div>BDE UTT</div>
         <Link className={styles.bottomLink} href={'/legal'}>

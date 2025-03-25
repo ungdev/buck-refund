@@ -14,7 +14,7 @@ export default function LoginPage() {
     <div id="login-page" className={styles.loginPage}>
       <LoginForm />
       <div className={styles.bottomNotes}>
-        <div>© 2024 UTT NET GROUP</div>
+        <div>© 2025 UTT NET GROUP</div>
         <div>BuckUTT</div>
         <div>BDE UTT</div>
         <Link className={styles.bottomLink} href={'/legal'}>

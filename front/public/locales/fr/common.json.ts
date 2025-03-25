@@ -12,7 +12,7 @@ export default {
   'login.fail.other': 'Impossible de se connecter',
   'dashboard.hi': 'Salut',
   'dashboard.balance': 'Ton solde BuckUTT :',
-  'dashboard.iban.yes': 'IBAN enregistré',
+  'dashboard.iban.yes': 'IBAN enregistré (finissant par {{last4}})',
   'dashboard.iban.no': "Pas d'IBAN enregistré",
   'dashboard.iban.save': 'Enregistrer',
   'dashboard.balanceTooLow': 'Ton solde est insuffisant pour effectuer un virement',

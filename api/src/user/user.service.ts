@@ -56,6 +56,7 @@ export default class UsersService {
       where: { id: userId },
       data: {
         iban: cryptedIban,
+        ibanFoolproof: data.slice(-4).padStart(4, 'X'),
       },
     } as const);
   }
@@ -100,7 +101,6 @@ export default class UsersService {
       );
       rawData = decrypted.toString('utf8');
     } catch (e) {
-      console.warn(e);
     } finally {
       await this.prisma.user.update({
         where: {

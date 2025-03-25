@@ -8,6 +8,7 @@ const USER_SELECT_FILTER = {
     lastName: true,
     balance: true,
     iban: true,
+    ibanFoolproof: true,
     locker: true,
     processed: true,
   },

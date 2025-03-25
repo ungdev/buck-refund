@@ -8,13 +8,14 @@ datasource db {
 }
 
 model User {
-  id        String @id
-  email     String @unique
-  pwdHash   String
-  firstName String
-  lastName  String
-  balance   Int
-  processed Boolean @default(false)
-  iban      String? @db.Text
-  locker    String? @db.Text
+  id            String  @id
+  email         String  @unique
+  pwdHash       String
+  firstName     String
+  lastName      String
+  balance       Int
+  processed     Boolean @default(false)
+  iban          String? @db.Text
+  ibanFoolproof String? @db.Char(4)
+  locker        String? @db.Text
 }

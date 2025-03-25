@@ -32,7 +32,7 @@ export class AuthController {
       access_token: token,
       currentBalance: user.balance,
       firstName: user.firstName,
-      paymentMethodRegistered: !!user.iban,
+      paymentMethodRegistered: user?.iban ? user?.ibanFoolproof : null,
     };
   }
 
@@ -71,7 +71,7 @@ export class AuthController {
       valid,
       currentBalance: user?.balance,
       firstName: user?.firstName,
-      paymentMethodRegistered: !!user?.iban,
+      paymentMethodRegistered: user?.iban ? user?.ibanFoolproof : null,
     };
   }
 }
