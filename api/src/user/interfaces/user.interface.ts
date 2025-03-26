@@ -1,5 +1,5 @@
-import { Prisma, PrismaClient } from '@prisma/client';
-import { generateCustomModel, RequestType } from '../../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { generateCustomModel, PrismaOptimize, RequestType } from '../../prisma/prisma.service';
 
 const USER_SELECT_FILTER = {
   select: {
@@ -17,5 +17,5 @@ const USER_SELECT_FILTER = {
 
 export type User = Prisma.UserGetPayload<typeof USER_SELECT_FILTER>;
 
-export const generateCustomUserModel = (prisma: PrismaClient) =>
+export const generateCustomUserModel = (prisma: PrismaOptimize) =>
   generateCustomModel(prisma, 'user', USER_SELECT_FILTER, (_, u: User) => u);

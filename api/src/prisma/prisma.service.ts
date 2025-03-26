@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { withOptimize } from '@prisma/extension-optimize';
 import { ConfigModule } from '../config/config.module';
 import { generateCustomUserModel } from '../user/interfaces/user.interface';
 import { omit } from '../utils';
@@ -8,13 +9,15 @@ import { omit } from '../utils';
 // TS cannot infer it alone as the construction of the class is made using reflection.
 // We can't use a type there, or else typescript will complain about the fact that PrismaService is defined twice.
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface PrismaService extends ReturnType<typeof createPrismaClientExtension> {}
+export interface PrismaService extends ReturnType<typeof createPrismaClientExtension> { }
+const optimize = () => new PrismaClient({}).$extends(withOptimize({apiKey: process.env.OPTIMIZE_API_KEY}));
+export type PrismaOptimize = ReturnType<typeof optimize>;
 
 @Injectable()
 export class PrismaService implements ReturnType<typeof createPrismaClientExtension> {
-  readonly withDefaultBehaviour: PrismaClient;
+  readonly withDefaultBehaviour: PrismaOptimize;
   constructor(config: ConfigModule) {
-    this.withDefaultBehaviour = createPrismaClient(config);
+    this.withDefaultBehaviour = createPrismaClient(config).$extends(withOptimize({apiKey: process.env.OPTIMIZE_API_KEY}));
     const prisma = createPrismaClientExtension(this.withDefaultBehaviour);
     return new Proxy(this, {
       // So, basically, every time a property will be accessed, this function will be called :
@@ -45,7 +48,7 @@ function createPrismaClient(config: ConfigModule) {
   });
 }
 
-function createPrismaClientExtension(prisma: ReturnType<typeof createPrismaClient>) {
+function createPrismaClientExtension(prisma: PrismaOptimize) {
   return prisma.$extends({
     model: {
       user: generateCustomUserModel(prisma),
@@ -55,14 +58,14 @@ function createPrismaClientExtension(prisma: ReturnType<typeof createPrismaClien
 
 // UTILITIES TO GENERATE CUSTOM MODEL FUNCTIONS
 type MayBePromise<T> = T | Promise<T>;
-type ModelNameType = keyof PrismaClient;
+type ModelNameType = keyof PrismaOptimize;
 type FunctionNameType<ModelName extends ModelNameType> = {
-  [K in keyof PrismaClient[ModelName]]: PrismaClient[ModelName][K] extends (arg: any) => void ? K : never;
-}[Exclude<keyof PrismaClient[ModelName], 'groupBy'>]; // Don't ask why, but groupBy produces a circular dependency. Anyway, this function seems mostly useless.
+  [K in keyof PrismaOptimize[ModelName]]: PrismaOptimize[ModelName][K] extends (arg: any) => void ? K : never;
+}[Exclude<keyof PrismaOptimize[ModelName], 'groupBy'>]; // Don't ask why, but groupBy produces a circular dependency. Anyway, this function seems mostly useless.
 export type RequestType<
   ModelName extends ModelNameType,
   FunctionName extends FunctionNameType<ModelName> = FunctionNameType<ModelName>,
-> = PrismaClient[ModelName][FunctionName] extends (arg: infer P extends object) => void ? P : never;
+> = PrismaOptimize[ModelName][FunctionName] extends (arg: infer P extends object) => void ? P : never;
 export type UserFriendlyRequestType<
   ModelName extends ModelNameType,
   FunctionName extends FunctionNameType<ModelName>,
@@ -70,7 +73,7 @@ export type UserFriendlyRequestType<
 > = Omit<RequestType<ModelName, FunctionName>, 'select' | 'include' | 'orderBy'> &
   (Record<string, never> extends CustomArgs ? { args?: never } : { args: CustomArgs });
 export type Formatter<RawEntity, FormattedEntity, FormatterArgs extends any[]> = (
-  prisma: ReturnType<typeof createPrismaClient>,
+  prisma: PrismaOptimize,
   raw: RawEntity,
   ...args: FormatterArgs
 ) => MayBePromise<FormattedEntity>;
@@ -83,7 +86,7 @@ function generateCustomModelFunction<
   FormatterArgs extends any[],
   QueryArgs extends object,
 >(
-  prisma: PrismaClient,
+  prisma: PrismaOptimize,
   modelName: ModelName,
   functionName: FunctionName,
   selectFilter: Partial<RequestType<ModelName, FunctionName>>,
@@ -117,7 +120,7 @@ export function generateCustomModel<
   FormatterArgs extends any[],
   QueryArgs extends object,
 >(
-  prisma: PrismaClient,
+  prisma: PrismaOptimize,
   modelName: ModelName,
   selectFilter: Partial<RequestType<ModelName, FunctionNameType<ModelName>>>,
   format: Formatter<Raw, Formatted, FormatterArgs>,
