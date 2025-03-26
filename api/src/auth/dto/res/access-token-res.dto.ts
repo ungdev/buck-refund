@@ -3,4 +3,5 @@ export default class AccessTokenResDto {
   firstName: string;
   currentBalance: number;
   paymentMethodRegistered: string | null;
+  processed: boolean;
 }

@@ -32,7 +32,8 @@ export class AuthController {
       access_token: token,
       currentBalance: user.balance,
       firstName: user.firstName,
-      paymentMethodRegistered: user?.iban ? user?.ibanFoolproof : null,
+      paymentMethodRegistered: user.iban ? user.ibanFoolproof : null,
+      processed: !!user.processed,
     };
   }
 
@@ -72,6 +73,7 @@ export class AuthController {
       currentBalance: user?.balance,
       firstName: user?.firstName,
       paymentMethodRegistered: user?.iban ? user?.ibanFoolproof : null,
+      processed: !!user?.processed,
     };
   }
 }

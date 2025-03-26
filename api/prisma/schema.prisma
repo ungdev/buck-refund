@@ -14,7 +14,7 @@ model User {
   firstName     String
   lastName      String
   balance       Int
-  processed     Boolean @default(false)
+  processed     DateTime?
   iban          String? @db.Text
   ibanFoolproof String? @db.Char(4)
   locker        String? @db.Text

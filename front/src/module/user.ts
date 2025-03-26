@@ -6,6 +6,7 @@ export interface UserSlice {
   firstName: string;
   currentBalance: number;
   paymentMethodRegistered: string | null;
+  processed: boolean;
 }
 
 export const userSlice = createSlice({

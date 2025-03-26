@@ -3,4 +3,5 @@ export default class TokenValidityResDto {
   firstName: string;
   currentBalance: number;
   paymentMethodRegistered: string | null;
+  processed: boolean;
 }
