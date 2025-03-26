@@ -21,7 +21,7 @@ export default class UsersController {
     const data = await this.usersService.consumeLocker(user, dto.data);
     if (!data) throw new AppException(ERROR_CODE.LOCKER_ERROR);
     if (user.processed) throw new AppException(ERROR_CODE.ALREADY_PROCESSED);
-    if (user.balance < 1)
+    if (user.balance < this.config.BALANCE_MIN_VALUE)
       throw new AppException(
         ERROR_CODE.USER_BALANCE_TOO_LOW,
         (this.config.BALANCE_MIN_VALUE / 100).toLocaleString('fr-FR', { currency: 'EUR', style: 'currency' }),

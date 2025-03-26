@@ -7,11 +7,12 @@ import { ApiBody, ApiCreatedResponse, ApiHeader, ApiOkResponse, ApiOperation, Ap
 import AccessTokenResponse from './dto/res/access-token-res.dto';
 import TokenValidityResDto from './dto/res/token-validity-res.dto';
 import { ApiAppErrorResponse } from '../app.dto';
+import { ConfigModule } from '../config/config.module';
 
 @Controller('auth')
 @ApiTags('Authentication')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private config: ConfigModule) {}
 
   @HttpCode(HttpStatus.OK)
   @IsPublic()
@@ -34,6 +35,7 @@ export class AuthController {
       firstName: user.firstName,
       paymentMethodRegistered: user.iban ? user.ibanFoolproof : null,
       processed: !!user.processed,
+      eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
     };
   }
 
@@ -74,6 +76,7 @@ export class AuthController {
       firstName: user?.firstName,
       paymentMethodRegistered: user?.iban ? user?.ibanFoolproof : null,
       processed: !!user?.processed,
+      eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
     };
   }
 }

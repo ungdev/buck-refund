@@ -6,14 +6,21 @@ export class AdminService {
   constructor(private prisma: PrismaService) {}
 
   async getUsersReport() {
-    return this.prisma.user.updateMany({
+    const users = await this.prisma.user.findMany({
       where: {
         processed: null,
         iban: { not: null },
       },
-      data: {
-        processed: new Date(),
-      },
+      take: 250,
     });
+    // await this.prisma.user.updateMany({
+    //   where: {
+    //     id: { in: users.map((u) => u.id) },
+    //   },
+    //   data: {
+    //     processed: new Date(),
+    //   },
+    // });
+    return users;
   }
 }

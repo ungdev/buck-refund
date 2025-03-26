@@ -25,6 +25,11 @@ export class ConfigModule {
   public readonly CRYPTO_PUBLIC_KEY: string;
   public readonly BALANCE_MIN_VALUE: number;
   public readonly LOCKER_SERVICE_KEY: string;
+  public readonly XML_EXPORT_COMPANY_NAME: string;
+  public readonly XML_EXPORT_COMPANY_IBAN: string;
+  public readonly XML_EXPORT_COMPANY_BIC: string;
+  public readonly XML_EXPORT_COMPANY_ADDRESS: string;
+  public readonly XML_EXPORT_COMPANY_ADDRESS_2: string;
 
   // DEV ENVIRONMENT ONLY
 
@@ -40,6 +45,11 @@ export class ConfigModule {
     this.CRYPTO_PUBLIC_KEY = config.get('CRYPTO_PUBLIC_KEY');
     this.BALANCE_MIN_VALUE = Number(config.get('BALANCE_MIN_VALUE'));
     this.LOCKER_SERVICE_KEY = config.get('LOCKER_SERVICE_KEY');
+    this.XML_EXPORT_COMPANY_NAME = config.get('XML_EXPORT_COMPANY_NAME');
+    this.XML_EXPORT_COMPANY_IBAN = config.get('XML_EXPORT_COMPANY_IBAN');
+    this.XML_EXPORT_COMPANY_BIC = config.get('XML_EXPORT_COMPANY_BIC');
+    this.XML_EXPORT_COMPANY_ADDRESS = config.get('XML_EXPORT_COMPANY_ADDRESS');
+    this.XML_EXPORT_COMPANY_ADDRESS_2 = config.get('XML_EXPORT_COMPANY_ADDRESS_2');
 
     this._FAKER_SEED = isTestEnv ? Number(config.get('FAKER_SEED')) : undefined;
   }
