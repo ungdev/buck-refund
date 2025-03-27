@@ -5,4 +5,5 @@ export default class AccessTokenResDto {
   paymentMethodRegistered: string | null;
   processed: boolean;
   eligible: boolean;
+  operation: 'administrate' | 'refund';
 }

@@ -9,7 +9,10 @@ import { ConfigModule } from '../config/config.module';
 @Controller('admin')
 @ApiTags('Authentication')
 export class AdminController {
-  constructor(private admin: AdminService, private config: ConfigModule) {}
+  constructor(
+    private admin: AdminService,
+    private config: ConfigModule,
+  ) {}
 
   @HttpCode(HttpStatus.CREATED)
   @IsPublic()
@@ -129,8 +132,8 @@ export class AdminController {
     return !head
       ? `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>${serializedObjects}`
       : serializedObjects.length
-      ? `<${head}${serializedProps}>${serializedObjects}</${head}>`
-      : `<${head}${serializedProps}/>`;
+        ? `<${head}${serializedProps}>${serializedObjects}</${head}>`
+        : `<${head}${serializedProps}/>`;
   }
 }
 

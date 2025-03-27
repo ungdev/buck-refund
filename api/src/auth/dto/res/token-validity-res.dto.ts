@@ -5,4 +5,5 @@ export default class TokenValidityResDto {
   paymentMethodRegistered: string | null;
   processed: boolean;
   eligible: boolean;
+  operation: false | 'administrate' | 'refund';
 }

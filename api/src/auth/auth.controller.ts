@@ -12,7 +12,10 @@ import { ConfigModule } from '../config/config.module';
 @Controller('auth')
 @ApiTags('Authentication')
 export class AuthController {
-  constructor(private authService: AuthService, private config: ConfigModule) {}
+  constructor(
+    private authService: AuthService,
+    private config: ConfigModule,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @IsPublic()
@@ -36,6 +39,7 @@ export class AuthController {
       paymentMethodRegistered: user.iban ? user.ibanFoolproof : null,
       processed: !!user.processed,
       eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
+      operation: user.type === 'ADMIN' ? 'administrate' : 'refund',
     };
   }
 
@@ -76,7 +80,8 @@ export class AuthController {
       firstName: user?.firstName,
       paymentMethodRegistered: user?.iban ? user?.ibanFoolproof : null,
       processed: !!user?.processed,
-      eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
+      eligible: user?.balance >= this.config.BALANCE_MIN_VALUE,
+      operation: user ? (user.type === 'ADMIN' ? 'administrate' : 'refund') : false,
     };
   }
 }

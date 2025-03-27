@@ -8,14 +8,25 @@ datasource db {
 }
 
 model User {
-  id            String  @id
-  email         String  @unique
+  id            String    @id
+  type          UserType  @default(USER)
+  email         String    @unique
   pwdHash       String
   firstName     String
   lastName      String
   balance       Int
   processed     DateTime?
-  iban          String? @db.Text
-  ibanFoolproof String? @db.Char(4)
-  locker        String? @db.Text
+  iban          String?   @db.Text
+  ibanFoolproof String?   @db.Char(4)
+  locker        String?   @db.Text
+}
+
+model ReportProperty {
+  id    String @id
+  value String
+}
+
+enum UserType {
+  ADMIN
+  USER
 }

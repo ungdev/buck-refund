@@ -4,6 +4,7 @@ import { generateCustomModel, RequestType } from '../../prisma/prisma.service';
 const USER_SELECT_FILTER = {
   select: {
     id: true,
+    type: true,
     firstName: true,
     lastName: true,
     balance: true,
