@@ -23,7 +23,7 @@ model User {
 
 model ReportProperty {
   id    ReportPropertyType @id
-  value String
+  value String             @db.Text
 }
 
 enum UserType {

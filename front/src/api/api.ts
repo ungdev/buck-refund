@@ -130,7 +130,7 @@ async function internalRequestAPI<RequestType>(
   timeoutMillis: number,
   version: string,
   isFile: true,
-): Promise<APIResponse<Blob>>;
+): Promise<APIResponse<string>>;
 async function internalRequestAPI<RequestType, ResponseType>(
   method: string,
   route: string,
@@ -146,7 +146,7 @@ async function internalRequestAPI<RequestType, ResponseType>(
   timeoutMillis: number,
   version: string,
   isFile: boolean,
-): Promise<APIResponse<ResponseType | Blob>> {
+): Promise<APIResponse<ResponseType | string>> {
   // Generate headers
   const headers = new Headers();
   headers.append('Authorization', authorizationToken ? `Bearer ${authorizationToken}` : '');
@@ -179,7 +179,7 @@ async function internalRequestAPI<RequestType, ResponseType>(
     if (response.status === StatusCodes.NO_CONTENT) {
       return { code: response.status, body: null as ResponseType };
     }
-    if (isFile && method === 'GET') return { code: response.status, body: await response.blob() };
+    if (isFile && method === 'GET') return { code: response.status, body: await response.text() };
     if (!response.headers.get('content-type')?.includes('application/json')) return { error: ResponseError.not_json };
 
     try {

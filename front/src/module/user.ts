@@ -7,6 +7,8 @@ export interface UserSlice {
   currentBalance: number;
   paymentMethodRegistered: string | null;
   processed: boolean;
+  eligible: boolean;
+  operation: 'administrate' | 'refund';
 }
 
 export const userSlice = createSlice({

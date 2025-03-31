@@ -30,6 +30,27 @@
       }
     }
 
+    &:has(.processed) {
+      &::before {
+        white-space: pre;
+        content: '💸\ATon remboursement\A a déjà été traité';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) rotate(-15deg);
+        text-transform: uppercase;
+        text-align: center;
+        font-size: 1.8em;
+      }
+    }
+
+    .processed {
+      opacity: 0.2;
+      cursor: not-allowed;
+      pointer-events: none;
+      user-select: none;
+    }
+
     .balance {
       margin: 20px 0;
       font-size: 1.2em;

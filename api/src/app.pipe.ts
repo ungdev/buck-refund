@@ -14,6 +14,9 @@ export class AppValidationPipe extends ValidationPipe {
     super({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transformOptions: {
+        exposeUnsetFields: false,
+      },
       exceptionFactory: validationExceptionFactory,
     });
   }

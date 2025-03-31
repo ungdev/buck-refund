@@ -3,5 +3,5 @@ import { AdminController } from './admin.controller';
 import { AdminService } from './admin.service';
 
 @Global()
-@Module({ controllers: [AdminController], providers: [AdminService], exports: [AdminService] })
+@Module({ controllers: [AdminController], providers: [AdminService] })
 export class AdminModule {}

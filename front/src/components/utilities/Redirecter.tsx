@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 
 interface RouteConditionState {
   loggedIn: boolean;
+  administrate: boolean;
 }
 
 type RouteRedirectionRules = {
@@ -12,8 +13,18 @@ type RouteRedirectionRules = {
 };
 
 const redirectionRules: RouteRedirectionRules = {
-  '/login': [{ condition: (state) => state.loggedIn, redirectTo: '/' }],
-  '/': [{ condition: (state) => !state.loggedIn, redirectTo: '/login' }],
+  '/login': [
+    { condition: (state) => state.loggedIn && !state.administrate, redirectTo: '/' },
+    { condition: (state) => state.loggedIn && state.administrate, redirectTo: '/admin' },
+  ],
+  '/admin': [
+    { condition: (state) => !state.loggedIn, redirectTo: '/login' },
+    { condition: (state) => state.loggedIn && !state.administrate, redirectTo: '/' },
+  ],
+  '/': [
+    { condition: (state) => !state.loggedIn, redirectTo: '/login' },
+    { condition: (state) => state.loggedIn && state.administrate, redirectTo: '/admin' },
+  ],
 };
 
 export default function Redirecter() {
@@ -21,6 +32,7 @@ export default function Redirecter() {
   const router = useRouter();
   const state = {
     loggedIn: useAppSelector((state) => state.session.logged),
+    administrate: useAppSelector((state) => state.user?.operation === 'administrate'),
   };
   const rules = redirectionRules[pathname];
   if (!rules) {

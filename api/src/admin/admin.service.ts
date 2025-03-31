@@ -16,7 +16,7 @@ const propertyMapping = {
 export class AdminService {
   constructor(
     private prisma: PrismaService,
-    private config: ConfigModule,
+    readonly config: ConfigModule,
   ) {}
 
   async getUsersReport() {
@@ -54,7 +54,7 @@ export class AdminService {
 
   async setConfiguration(dto: ConfigurationReqDto) {
     for (const prop in dto) {
-      const value = Array.isArray(dto[prop]) ? dto[prop].map(this.encrypt) : [this.encrypt(dto[prop])];
+      const value = Array.isArray(dto[prop]) ? dto[prop].map((d) => this.encrypt(d)) : [this.encrypt(dto[prop])];
       await this.prisma.$transaction(
         (<ReportPropertyType[]>propertyMapping[prop]).map((property, index) =>
           this.prisma.reportProperty.upsert({

@@ -1,6 +1,5 @@
 import { Body, Controller, Get, Header, HttpCode, HttpStatus, Patch, Response } from '@nestjs/common';
 import { AdminService } from './admin.service';
-import { IsPublic } from '../auth/decorator/public.decorator';
 import { AppException, ERROR_CODE } from '../exceptions';
 import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ApiAppErrorResponse } from '../app.dto';
@@ -52,6 +51,7 @@ export class AdminController {
   async generateReport(@Response() res: ExpressResponse, @GetUser() user: User) {
     if (user.type !== UserType.ADMIN) throw new AppException(ERROR_CODE.FORBIDDEN_NOT_ENOUGH_PERMISSIONS, 'ADMIN');
     const users = await this.admin.getUsersReport();
+    if (users.length === 0) throw new AppException(ERROR_CODE.EMPTY_REPORT);
     const configuration = await this.admin.getConfiguration();
     if (Object.keys(configuration).length < Object.keys(ReportPropertyType).length)
       throw new AppException(ERROR_CODE.MISSING_CONFIG);
@@ -69,7 +69,7 @@ export class AdminController {
               NbOfTxs: { value: users.length },
               CtrlSum: { value: ctrlSum },
               InitgPty: {
-                Nm: { value: configuration.REPORT_DEBTOR_NAME.slice(0, 140) },
+                Nm: { value: configuration.REPORT_DEBTOR_NAME },
               },
             },
             PmtInf: [
@@ -90,13 +90,12 @@ export class AdminController {
                 },
                 ReqdExctnDt: { DtTm: { value: new Date().toISOString().slice(0, -5) } },
                 Dbtr: {
-                  Nm: { value: configuration.REPORT_DEBTOR_NAME.slice(0, 140) },
+                  Nm: { value: configuration.REPORT_DEBTOR_NAME },
                   PstlAdr: {
                     Ctry: { value: 'FR' },
-                    AdrLine: [
-                      configuration.REPORT_DEBTOR_ADDR.slice(0, 70),
-                      configuration.REPORT_DEBTOR_ADDR2.slice(0, 70),
-                    ].map((v) => ({ value: v })),
+                    AdrLine: [configuration.REPORT_DEBTOR_ADDR, configuration.REPORT_DEBTOR_ADDR2].map((v) => ({
+                      value: v,
+                    })),
                   },
                 },
                 DbtrAcct: {

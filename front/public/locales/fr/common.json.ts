@@ -15,7 +15,9 @@ export default {
   'dashboard.iban.yes': 'IBAN enregistré (finissant par {{last4}})',
   'dashboard.iban.no': "Pas d'IBAN enregistré",
   'dashboard.iban.save': 'Enregistrer',
-  'dashboard.balanceTooLow': 'Ton solde est insuffisant pour effectuer un virement',
+  'dashboard.not_eligible_line1': 'Aïe 🤕',
+  'dashboard.not_eligible_line2':
+    "Tu n'est pas éligible au remboursement de ton solde BuckUTT... Ton solde est probablement insuffisant.",
   'dashboard.info.line1': 'Tu est éligible pour récupérer ton solde BuckUTT !',
   'dashboard.info.line2': 'Rentre ton IBAN pour débuter la procédure 👇',
   'dashboard.info.update': "Tu as changé d'avis et tu veux mettre à jour ton IBAN ?",
@@ -28,4 +30,13 @@ export default {
   'dashboard.iban.saved': "C'est tout bon, on a bien enregistré ton IBAN ☺️",
   'dashboard.disclaimer':
     "Une fois ta demande traitée, tu recevras un virement de la part de BDE UTT. Les délais de traitement peuvent varier. Ni BDE UTT ni UTT NET GROUP ne peuvent être tenus responsables en cas de problème et se réservent le droit de refuser un virement ou d'annuler la transaction.",
+  'admin.loading': 'Chargement...',
+  'admin.private_key': 'Coller la clé privée ici',
+  'admin.generate': 'Générer',
+  'admin.placeholder_debtor_name': 'Nom du débiteur',
+  'admin.placeholder_debtor_iban': 'IBAN du débiteur',
+  'admin.placeholder_debtor_bic': 'BIC du débiteur',
+  'admin.placeholder_debtor_addr_1': 'Adresse du débiteur (ligne 1)',
+  'admin.placeholder_debtor_addr_2': 'Adresse du débiteur (ligne 2)',
+  'admin.placeholder_configure': 'Configurer',
 } as const;

@@ -44,6 +44,7 @@ export const enum ERROR_CODE {
   INVALID_CREDENTIALS = 3004,
   ALREADY_PROCESSED = 4001,
   MISSING_CONFIG = 4002,
+  EMPTY_REPORT = 4003,
   MISSING_ENV = 5000,
 }
 
@@ -168,6 +169,10 @@ export const ErrorData = Object.freeze({
   [ERROR_CODE.INVALID_CREDENTIALS]: {
     message: 'Credentials incorrect',
     httpCode: HttpStatus.UNAUTHORIZED,
+  },
+  [ERROR_CODE.EMPTY_REPORT]: {
+    message: 'No new entries since last report',
+    httpCode: HttpStatus.GONE,
   },
   [ERROR_CODE.ALREADY_PROCESSED]: {
     message: 'Your account has already been processed',
