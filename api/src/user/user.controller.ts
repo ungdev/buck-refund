@@ -11,13 +11,18 @@ import { ConfigModule } from 'src/config/config.module';
 @Controller('user')
 @ApiTags('User')
 export default class UsersController {
-  constructor(private usersService: UsersService, private config: ConfigModule) {}
+  constructor(
+    private usersService: UsersService,
+    private config: ConfigModule,
+  ) {}
 
   @Put('/iban')
   @ApiOperation({ description: 'Sets the IBAN of the current user.' })
   @ApiOkResponse()
   @ApiAppErrorResponse(ERROR_CODE.IBAN_INVALID, 'The IBAN provided verification keys are not matching its content')
   async setCurrentIban(@GetUser() user: User, @Body() dto: UserSetIbanDto) {
+    if (!this.config.CRYPTO_PUBLIC_KEY) throw new AppException(ERROR_CODE.MISSING_ENV, 'CRYPTO_PUBLIC_KEY');
+    if (!this.config.LOCKER_SERVICE_KEY) throw new AppException(ERROR_CODE.MISSING_ENV, 'LOCKER_SERVICE_KEY');
     const data = await this.usersService.consumeLocker(user, dto.data);
     if (!data) throw new AppException(ERROR_CODE.LOCKER_ERROR);
     if (user.processed) throw new AppException(ERROR_CODE.ALREADY_PROCESSED);

@@ -33,6 +33,7 @@ export const enum ERROR_CODE {
   PARAM_TOO_HIGH = 2017,
   PARAM_NOT_INT = 2018,
   PARAM_NOT_ASCII = 2019,
+  PARAM_EMPTY_BODY = 2020,
   PARAM_DOES_NOT_MATCH_REGEX = 2102,
   LOCKER_ERROR = 2202,
   IBAN_INVALID = 2103,
@@ -42,6 +43,8 @@ export const enum ERROR_CODE {
   INVALID_TOKEN_FORMAT = 3003,
   INVALID_CREDENTIALS = 3004,
   ALREADY_PROCESSED = 4001,
+  MISSING_CONFIG = 4002,
+  MISSING_ENV = 5000,
 }
 
 /**
@@ -130,6 +133,10 @@ export const ErrorData = Object.freeze({
     message: 'The following parameters must be ascii: %',
     httpCode: HttpStatus.BAD_REQUEST,
   },
+  [ERROR_CODE.PARAM_EMPTY_BODY]: {
+    message: 'The body of the request must not be empty',
+    httpCode: HttpStatus.BAD_REQUEST,
+  },
   [ERROR_CODE.PARAM_DOES_NOT_MATCH_REGEX]: {
     message: 'The following parameters must match the regex "%": %',
     httpCode: HttpStatus.BAD_REQUEST,
@@ -165,6 +172,14 @@ export const ErrorData = Object.freeze({
   [ERROR_CODE.ALREADY_PROCESSED]: {
     message: 'Your account has already been processed',
     httpCode: HttpStatus.GONE,
+  },
+  [ERROR_CODE.MISSING_CONFIG]: {
+    message: 'Some configuration is missing',
+    httpCode: HttpStatus.CONFLICT,
+  },
+  [ERROR_CODE.MISSING_ENV]: {
+    message: 'The environment variable is not configured: %',
+    httpCode: HttpStatus.INTERNAL_SERVER_ERROR,
   },
 } as const) satisfies Readonly<{
   [error in ERROR_CODE]: {

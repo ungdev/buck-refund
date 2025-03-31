@@ -22,11 +22,19 @@ model User {
 }
 
 model ReportProperty {
-  id    String @id
+  id    ReportPropertyType @id
   value String
 }
 
 enum UserType {
   ADMIN
   USER
+}
+
+enum ReportPropertyType {
+  REPORT_DEBTOR_NAME
+  REPORT_DEBTOR_IBAN
+  REPORT_DEBTOR_BIC
+  REPORT_DEBTOR_ADDR
+  REPORT_DEBTOR_ADDR2
 }
