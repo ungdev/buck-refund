@@ -51,6 +51,7 @@ function IbanInput(
     }, 5);
     await onEnter(valid, value);
     clearInterval(intervalId);
+    setIban('');
     setLoading(false);
   };
 
