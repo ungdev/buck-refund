@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
 .inputWrapper {
   input {
+    font-size: 1.1em;
     border: none;
     appearance: none;
     border-radius: 5px;
@@ -7,6 +10,9 @@
     width: 36ch;
     display: inline-block;
     vertical-align: middle;
+    font-family:
+      Roboto Mono,
+      monospace;
   }
 
   .button {
@@ -21,6 +27,41 @@
 
     svg {
       width: 1.2em;
+    }
+
+    &:disabled svg {
+      stroke: currentColor;
+      height: 1em;
+      width: 1em;
+      margin-left: 0.5ch;
+      margin-top: 1px;
+      margin-right: 1px;
+    }
+  }
+
+  .input_animation {
+    font-size: 1.1em;
+    border-radius: 5px;
+    padding: 3px 5px;
+    width: 36ch;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #f0f0f2;
+    color: #444c5f;
+    font-family:
+      Roboto Mono,
+      monospace;
+    user-select: none;
+    cursor: not-allowed;
+
+    & > div {
+      width: 1ch;
+      text-align: center;
+      display: inline-block;
+
+      &:nth-child(4n + 1):not(:first-child) {
+        margin-left: 1ch;
+      }
     }
   }
 }

@@ -15,6 +15,7 @@ export default {
   'dashboard.iban.yes': 'IBAN enregistré (finissant par {{last4}})',
   'dashboard.iban.no': "Pas d'IBAN enregistré",
   'dashboard.iban.save': 'Enregistrer',
+  'dashboard.iban.encrypting': 'Chiffrement',
   'dashboard.not_eligible_line1': 'Aïe 🤕',
   'dashboard.not_eligible_line2':
     "Tu n'est pas éligible au remboursement de ton solde BuckUTT... Ton solde est probablement insuffisant.",
