@@ -10,6 +10,8 @@ export default {
   'login.loading': 'Chargement',
   'login.fail.creds': 'Identifiants incorrects',
   'login.fail.other': 'Impossible de se connecter',
+  'magic_link.placeholder': 'Adresse email',
+  'magic_link.send': 'Envoyer un mail',
   'dashboard.hi': 'Salut',
   'dashboard.balance': 'Ton solde BuckUTT :',
   'dashboard.iban.yes': 'IBAN enregistré (finissant par {{last4}})',

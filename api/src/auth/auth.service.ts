@@ -4,10 +4,16 @@ import * as bcrypt from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '../config/config.module';
 import AuthSignInReqDto from './dto/req/auth-sign-in-req.dto';
+import { MailService } from '../mails/mail.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwt: JwtService, private config: ConfigModule) {}
+  constructor(
+    private prisma: PrismaService,
+    private jwt: JwtService,
+    private mail: MailService,
+    private config: ConfigModule,
+  ) {}
 
   /**
    * Verifies the credentials are right.
@@ -74,5 +80,65 @@ export class AuthService {
         id,
       },
     });
+  }
+
+  async generateMagicLink(email: string, ip: string): Promise<{ code: string; name: string } | null> {
+    try {
+      const link = await this.prisma.magicLink.create({
+        data: {
+          user: {
+            connect: {
+              email,
+            },
+          },
+          originatingIp: ip,
+        },
+        select: {
+          token: true,
+          user: {
+            select: {
+              firstName: true,
+            },
+          },
+        },
+      });
+      return { code: link.token.replaceAll('-', '').toUpperCase(), name: link.user.firstName };
+    } catch {
+      // User does not exist, silent the error
+      return null;
+    }
+  }
+
+  async sendMagicLink(email: string, token: string, name: string): Promise<void> {
+    return this.mail.sendGeneric({
+      recipient: email,
+      title: 'Accès à ton compte BuckUTT',
+      content: `<h2>Bonjour ${name},</h2><p>Voici le lien pour accéder à ton compte BuckUTT : <a href="${this.config.FRONT_URL}/magic?spell=${token}">${this.config.FRONT_URL}/magic?spell=${token}</a></p><p>Le lien est valide pendant ${this.config.MAGIC_LINK_VALIDITY / 60000} minutes. Si tu n'as pas demandé ce lien, ignore ce message.</p><p>À bientôt !</p>`,
+    });
+  }
+
+  async consumeMagicLink(token: string): Promise<{ token: string; id: string } | null> {
+    const link = await this.prisma.magicLink.update({
+      data: {
+        usedAt: new Date(),
+      },
+      where: {
+        usedAt: null,
+        token,
+        createdAt: {
+          gte: new Date(Date.now() - this.config.MAGIC_LINK_VALIDITY),
+        },
+      },
+      select: {
+        user: {
+          select: {
+            id: true,
+            email: true,
+          },
+        },
+      },
+    });
+    if (!link) return null;
+    return { token: await this.signToken(link.user.id, link.user.email), id: link.user.id };
   }
 }

@@ -25,6 +25,13 @@ export class ConfigModule {
   public readonly CRYPTO_PUBLIC_KEY: string;
   public readonly BALANCE_MIN_VALUE: number;
   public readonly LOCKER_SERVICE_KEY: string;
+  public readonly SMTP_HOST: string;
+  public readonly SMTP_PORT: number;
+  public readonly SMTP_USER: string;
+  public readonly SMTP_PASS: string;
+  public readonly SMTP_FROM: string;
+  public readonly FRONT_URL: string;
+  public readonly MAGIC_LINK_VALIDITY: number;
 
   // DEV ENVIRONMENT ONLY
 
@@ -40,6 +47,13 @@ export class ConfigModule {
     this.CRYPTO_PUBLIC_KEY = config.get('CRYPTO_PUBLIC_KEY');
     this.BALANCE_MIN_VALUE = Number(config.get('BALANCE_MIN_VALUE'));
     this.LOCKER_SERVICE_KEY = config.get('LOCKER_SERVICE_KEY');
+    this.SMTP_HOST = config.get('SMTP_HOST');
+    this.SMTP_PORT = Number(config.get('SMTP_PORT'));
+    this.SMTP_USER = config.get('SMTP_USER');
+    this.SMTP_PASS = config.get('SMTP_PASS');
+    this.SMTP_FROM = config.get('SMTP_FROM');
+    this.FRONT_URL = config.get('FRONT_URL');
+    this.MAGIC_LINK_VALIDITY = Number(config.get('MAGIC_LINK_VALIDITY'));
 
     this._FAKER_SEED = isTestEnv ? Number(config.get('FAKER_SEED')) : undefined;
   }

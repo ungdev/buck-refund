@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Headers, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Headers, HttpCode, HttpStatus, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import AuthSignInReqDto from './dto/req/auth-sign-in-req.dto';
 import { IsPublic } from './decorator';
@@ -8,6 +8,8 @@ import AccessTokenResponse from './dto/res/access-token-res.dto';
 import TokenValidityResDto from './dto/res/token-validity-res.dto';
 import { ApiAppErrorResponse } from '../app.dto';
 import { ConfigModule } from '../config/config.module';
+import AuthCreateMagicDto from './dto/req/auth-create-magic.dto';
+import AuthDeleteMagicDto from './dto/req/auth-delete-magic.dto';
 
 @Controller('auth')
 @ApiTags('Authentication')
@@ -82,6 +84,41 @@ export class AuthController {
       processed: !!user?.processed,
       eligible: user?.balance >= this.config.BALANCE_MIN_VALUE,
       operation: user ? (user.type === 'ADMIN' ? 'administrate' : 'refund') : false,
+    };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @IsPublic()
+  @Post('magic')
+  @ApiOperation({
+    description: 'Generates a magic link for the user. This link should be sent to the user by email.',
+  })
+  @ApiBody({ type: AuthCreateMagicDto })
+  async generateMagicLink(@Body() dto: AuthCreateMagicDto, @Headers() { 'X-Forwarded-for': ip }): Promise<void> {
+    const linkData = await this.authService.generateMagicLink(dto.login, ip);
+    if (!linkData) throw new AppException(ERROR_CODE.INVALID_CREDENTIALS);
+    await this.authService.sendMagicLink(dto.login, linkData.code, linkData.name);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @IsPublic()
+  @Delete('magic')
+  @ApiOperation({
+    description: 'Consumes/Deletes the magic link.',
+  })
+  @ApiBody({ type: AuthDeleteMagicDto })
+  async consumeMagicLink(@Body() dto: AuthDeleteMagicDto): Promise<AccessTokenResponse> {
+    const { token, id } = (await this.authService.consumeMagicLink(dto.spell)) ?? {};
+    if (!token) throw new AppException(ERROR_CODE.INVALID_CREDENTIALS);
+    const user = id ? await this.authService.getUser(id) : undefined;
+    return {
+      access_token: token,
+      currentBalance: user.balance,
+      firstName: user.firstName,
+      paymentMethodRegistered: user.iban ? user.ibanFoolproof : null,
+      processed: !!user.processed,
+      eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
+      operation: user.type === 'ADMIN' ? 'administrate' : 'refund',
     };
   }
 }
