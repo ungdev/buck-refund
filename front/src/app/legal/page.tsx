@@ -172,9 +172,9 @@ export default function LegalPage() {
         </p>
         <h3 className={styles.subArticleTitle}>3.3. Transmissions des données à un tier</h3>
         <p>
-          Certaines informations de l'utilisateur sont transmises à l'association BDE UTT pour permettre le service
-          fournit par l'application. Tout utilisateur ne renseignant pas son IBAN ne verra pas ses données transmises à
-          BDE UTT.
+          Certaines informations de l'utilisateur sont transmises à l'association BDE UTT puis à son prestataire
+          bancaire pour permettre le service fourni par l'application. Tout utilisateur ne renseignant pas son IBAN ne
+          verra pas ses données transmises à BDE UTT.
           <br />
           <br />
           Les informations suivantes sont transmises de manière chiffrée à BDE UTT dans le cadre de l'utilisation du
@@ -272,7 +272,7 @@ export default function LegalPage() {
           L’utilisateur est invité à prendre connaissance de cette Politique à chaque fois qu’il utilise nos services,
           sans qu’il soit nécessaire de l’en prévenir formellement.
           <br />
-          La présente politique, éditée le 15/09/2024, a été mise à jour le {LAST_PRIVACY_POLICY_UPDATE}.
+          La présente politique, éditée le 03/04/2025, a été mise à jour le {LAST_PRIVACY_POLICY_UPDATE}.
         </p>
       </div>
     </div>
