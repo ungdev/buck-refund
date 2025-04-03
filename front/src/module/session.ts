@@ -48,6 +48,24 @@ export const login =
         cb(StatusCodes.INTERNAL_SERVER_ERROR);
       });
 
+export const castMagic =
+  (api: API, spell: string, cb: (error?: number) => void): AppThunk =>
+  (dispatch) =>
+    api
+      .delete<LoginResponseDto>(`auth/magic?spell=${spell}`)
+      .on('success', async (body) => {
+        dispatch(setToken(body.access_token));
+        dispatch(setUser(body));
+        cb();
+      })
+      .on(StatusCodes.UNAUTHORIZED, (body) => {
+        console.error('Wrong credentials', body);
+        cb(body.errorCode ?? StatusCodes.UNAUTHORIZED);
+      })
+      .on('error', () => {
+        cb(StatusCodes.INTERNAL_SERVER_ERROR);
+      });
+
 export const logout = (): AppThunk => (dispatch) => dispatch(setToken(null));
 
 export const isLoggedIn = (state: RootState) => state.session.logged;

@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Headers, HttpCode, HttpStatus, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Headers,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Query,
+  Request as Req,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import AuthSignInReqDto from './dto/req/auth-sign-in-req.dto';
 import { IsPublic } from './decorator';
@@ -10,6 +21,7 @@ import { ApiAppErrorResponse } from '../app.dto';
 import { ConfigModule } from '../config/config.module';
 import AuthCreateMagicDto from './dto/req/auth-create-magic.dto';
 import AuthDeleteMagicDto from './dto/req/auth-delete-magic.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 @ApiTags('Authentication')
@@ -87,15 +99,19 @@ export class AuthController {
     };
   }
 
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @IsPublic()
   @Post('magic')
   @ApiOperation({
     description: 'Generates a magic link for the user. This link should be sent to the user by email.',
   })
   @ApiBody({ type: AuthCreateMagicDto })
-  async generateMagicLink(@Body() dto: AuthCreateMagicDto, @Headers() { 'X-Forwarded-for': ip }): Promise<void> {
-    const linkData = await this.authService.generateMagicLink(dto.login, ip);
+  async generateMagicLink(
+    @Body() dto: AuthCreateMagicDto,
+    @Headers() { 'X-Forwarded-for': ip },
+    @Req() res: Request,
+  ): Promise<void> {
+    const linkData = await this.authService.generateMagicLink(dto.login, ip || res.socket.remoteAddress);
     if (!linkData) throw new AppException(ERROR_CODE.INVALID_CREDENTIALS);
     await this.authService.sendMagicLink(dto.login, linkData.code, linkData.name);
   }
@@ -107,8 +123,11 @@ export class AuthController {
     description: 'Consumes/Deletes the magic link.',
   })
   @ApiBody({ type: AuthDeleteMagicDto })
-  async consumeMagicLink(@Body() dto: AuthDeleteMagicDto): Promise<AccessTokenResponse> {
-    const { token, id } = (await this.authService.consumeMagicLink(dto.spell)) ?? {};
+  async consumeMagicLink(@Query() dto: AuthDeleteMagicDto): Promise<AccessTokenResponse> {
+    const { token, id } =
+      (await this.authService.consumeMagicLink(
+        dto.spell.replaceAll(/(?<=^.{8}|^.{12}|^.{16}|^.{20})/g, '-').toLocaleLowerCase(),
+      )) ?? {};
     if (!token) throw new AppException(ERROR_CODE.INVALID_CREDENTIALS);
     const user = id ? await this.authService.getUser(id) : undefined;
     return {

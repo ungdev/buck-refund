@@ -1,5 +1,5 @@
 import styles from './TextArea.module.scss';
-import { FC, forwardRef } from 'react';
+import { FC } from 'react';
 import Button from '@/components/UI/Button';
 
 function TextArea({
@@ -38,4 +38,4 @@ function TextArea({
   );
 }
 
-export default forwardRef(TextArea);
+export default TextArea;

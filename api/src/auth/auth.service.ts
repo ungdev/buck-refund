@@ -110,35 +110,45 @@ export class AuthService {
   }
 
   async sendMagicLink(email: string, token: string, name: string): Promise<void> {
-    return this.mail.sendGeneric({
-      recipient: email,
-      title: 'Accès à ton compte BuckUTT',
-      content: `<h2>Bonjour ${name},</h2><p>Voici le lien pour accéder à ton compte BuckUTT : <a href="${this.config.FRONT_URL}/magic?spell=${token}">${this.config.FRONT_URL}/magic?spell=${token}</a></p><p>Le lien est valide pendant ${this.config.MAGIC_LINK_VALIDITY / 60000} minutes. Si tu n'as pas demandé ce lien, ignore ce message.</p><p>À bientôt !</p>`,
-    });
+    try {
+      return this.mail.sendGeneric({
+        recipient: email,
+        title: 'Accès à ton compte BuckUTT',
+        content: `<h2>Bonjour ${name},</h2><p>Voici le lien pour accéder à ton compte BuckUTT : <a href="${this.config.FRONT_URL}/magic?spell=${token}">${this.config.FRONT_URL}/magic?spell=${token}</a></p><p>Le lien est valide pendant ${this.config.MAGIC_LINK_VALIDITY / 60000} minutes. Si tu n'as pas demandé ce lien, ignore ce message.</p><p>À bientôt !</p>`,
+      });
+    } catch (e) {
+      console.warn(e);
+      // The student mail does not exist anymore, contact bde
+      return null;
+    }
   }
 
   async consumeMagicLink(token: string): Promise<{ token: string; id: string } | null> {
-    const link = await this.prisma.magicLink.update({
-      data: {
-        usedAt: new Date(),
-      },
-      where: {
-        usedAt: null,
-        token,
-        createdAt: {
-          gte: new Date(Date.now() - this.config.MAGIC_LINK_VALIDITY),
+    try {
+      const link = await this.prisma.magicLink.update({
+        data: {
+          usedAt: new Date(),
         },
-      },
-      select: {
-        user: {
-          select: {
-            id: true,
-            email: true,
+        where: {
+          usedAt: null,
+          token,
+          createdAt: {
+            gte: new Date(Date.now() - this.config.MAGIC_LINK_VALIDITY),
           },
         },
-      },
-    });
-    if (!link) return null;
-    return { token: await this.signToken(link.user.id, link.user.email), id: link.user.id };
+        select: {
+          user: {
+            select: {
+              id: true,
+              email: true,
+            },
+          },
+        },
+      });
+      return { token: await this.signToken(link.user.id, link.user.email), id: link.user.id };
+    } catch {
+      // Link is not valid
+      return null;
+    }
   }
 }

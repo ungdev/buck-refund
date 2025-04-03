@@ -11,6 +11,7 @@ import { useAPI } from '@/api/api';
 import { useAppTranslation } from '@/lib/i18n';
 import Tooltip from '../UI/Tooltip';
 import Icons from '@/icons';
+import Link from '../UI/Link';
 
 export default function LoginForm() {
   const dispatch = useAppDispatch();
@@ -71,6 +72,9 @@ export default function LoginForm() {
           t('common:login')
         )}
       </Button>
+      <Link className={styles.bottomLink} href={'/magic'}>
+        {t('common:login.magic')}
+      </Link>
     </div>
   );
 }

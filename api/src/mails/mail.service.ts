@@ -45,7 +45,7 @@ export class MailService {
       if (!match) throw new Error('No title found in the email template');
       const derivedSubject = match[1];
       const mailOptions = {
-        from: this.config.SMTP_FROM,
+        from: `${this.config.SMTP_FROM} <${this.config.SMTP_USER}>`,
         to: recipient,
         subject: derivedSubject,
         html: content,

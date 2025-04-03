@@ -14,12 +14,12 @@ export default function LegalPage() {
   const ASSOCIATION_EMAIL = 'ung@utt.fr';
 
   // Data Protection Officer
-  const DPO_NAME = 'Guillaume Etheve';
+  const DPO_NAME = 'Camille Moussou';
   const DPO_EMAIL = 'ung@utt.fr';
 
   // Updates
-  const LAST_TERMS_UPDATE = '15/09/2024';
-  const LAST_PRIVACY_POLICY_UPDATE = '15/09/2024';
+  const LAST_TERMS_UPDATE = '03/04/2025';
+  const LAST_PRIVACY_POLICY_UPDATE = '03/04/2025';
 
   return (
     <div id="legal" className={styles.legal}>
@@ -41,31 +41,6 @@ export default function LegalPage() {
           <a href={`mailto:${ASSOCIATION_EMAIL}`}>{ASSOCIATION_EMAIL}</a>
         </p>
         <h1>Conditions Générales d'Utilisation (CGU)</h1>
-        {/* <h2 className={styles.articleTitle}>Collecte des données</h2>
-        <p>
-          Le site collecte certaines données personnelles renseignées par l’Utilisateur sur le site telles que le nom et
-          le prénom. Ces données ne seront en aucun cas échangées, distribuées ou vendues à un tiers sans l'accord
-          explicite de l'Utilisateur. L'Utilisateur peut, à tout moment, accorder ou révoquer son accord pour partager
-          ses données avec les autres utilisateurs du site.
-          <br />
-          En vertu de la loi Informatique et Libertés, en date du 6 janvier 1978, l'Utilisateur dispose d'un droit
-          d'accès, de rectification, de suppression et d'opposition de ses données personnelles. L'Utilisateur peut
-          exercer ce droit directement en effectuant une demande par mail à l’adresse{' '}
-          <a href="mailto:ung@utt.fr">ung@utt.fr</a>.
-          <br />
-          Le responsable du traitement des données est Guillaume ETHEVE.
-          <br />
-          L’équipe technique, les administrateurs, et les modérateurs du site pourront accéder aux données personnelles
-          de l'Utilisateur, sans nécessiter l'autorisation de l'utilisateur de partager ses données personnelles avec
-          les autres utilisateurs du site.
-          <br />
-          Les modérateurs du site sont désignés par l'UNG. L'UNG ne peut être tenu responsable des actions des
-          modérateurs du site. L'UNG doit cependant s'assurer, dans les limites du raisonnable, que les modérateurs sont
-          des personnes de confiance et respecteront la vie privée des utilisateurs.
-          <br />
-          Ces données seront conservées jusqu'à ce que l'Utilisateur décide de les supprimer, ou qu'il ait terminé ses
-          études à l'Université de Technologie de Troyes et n'ait pas demandé la conservation de son compte.
-        </p> */}
         <h2 className={styles.articleTitle}>Propriété intellectuelle</h2>
         <p>
           Le contenu du site internet reste la propriété de l'association ASS UTT NET GROUP, seul titulaire des droits
@@ -162,41 +137,54 @@ export default function LegalPage() {
         <h2 className={styles.articleTitle}>
           3. Données à caractère personnel collectées et traitées dans le cadre de la navigation sur le site
         </h2>
-        {/* <p>
-          Les données à caractère personnel collectées sur le site sont les suivantes :
-          <ul>
-            <li>Les données de connexion (adresse IP, logs) ;</li>
-            <li>Les données de navigation (type de navigateur, durée de la visite, pages visitées) ;</li>
-            <li>Les données de localisation.</li>
-          </ul>
-          <br />
-        </p>
-
-        <p>
-          En cas de création d'un compte utilisateur, sont également collectées les données suivantes :
-          <ul>
-            <li>Nom et prénom ;</li>
-            <li>Adresse email ;</li>
-            <li>Numéro de téléphone ;</li>
-            <li>Adresse postale.</li>
-          </ul>
-          <br />
-
-
-          La collecte et le traitement de ces données répond aux finalités suivantes :
-
-          <ul>
-            <li>Statistiques et amélioration du site ;</li>
-            <li>Envoi de newsletters ;</li>
-            <li>Fonctionnement des fonctionnalités internes au site telles que le trombinoscope et le cumul d'emploi du temps ;</li>
-          </ul>
-        </p> */}
         <h3 className={styles.subArticleTitle}>3.1. Données collectées</h3>
-        <p>{/** TODO: Add Data collected */}</p>
+        <p>
+          Les données collectés par ce site sont de trois types distincts :
+          <ul>
+            <li>
+              <b>les données préexistantes :</b> Certaines données (nom, prénom, adresse mail, mot de passe, solde
+              buckutt) sont issues des informations des anciens comptes buckutt. Elles ne peuvent en aucun cas être
+              issues d'un autre service.
+            </li>
+            <li>
+              <b>les données renseignées :</b> L'utilisateur est incité à fournir certaines données dans le cadre du
+              fonctionnement du service (IBAN, BIC). Ces données sont modifiables jusqu'à émission du remboursement par
+              l'association BDE UTT.
+            </li>
+            <li>
+              <b>les données de services :</b> Afin d'assurer le bon fonctionnement du service, certaines données
+              (adresse ip, logs, horodatages) sont collectées. Elles permettent de vérifier la légitimité des actions
+              menées sur la plateforme et de pouvoir enquêter sur les évènements anormaux.
+            </li>
+          </ul>
+        </p>
         <h3 className={styles.subArticleTitle}>3.2. Mode de collecte des données</h3>
-        <p>{/** TODO: Add Data Collection Mode */}</p>
+        <p>
+          Les données sont collectées de différentes manières :
+          <ul>
+            <li>Les données préexistantes sont extraites de vos anciennes données BuckUTT.</li>
+            <li>
+              Les données renseignées sont fournies par l'utilisateur (vous). Vous pouvez décider ne pas les fournir
+              mais le service ne pourra pas fonctionner correctement.
+            </li>
+            <li>Les données de service sont collectées par le serveur lors de l'utilisation du site internet.</li>
+          </ul>
+        </p>
         <h3 className={styles.subArticleTitle}>3.3. Transmissions des données à un tier</h3>
-        <p>{/** TODO: Add Matomo and Sentry here */}</p>
+        <p>
+          Certaines informations de l'utilisateur sont transmises à l'association BDE UTT pour permettre le service
+          fournit par l'application. Tout utilisateur ne renseignant pas son IBAN ne verra pas ses données transmises à
+          BDE UTT.
+          <br />
+          <br />
+          Les informations suivantes sont transmises de manière chiffrée à BDE UTT dans le cadre de l'utilisation du
+          service :
+          <ul>
+            <li>Nom, Prénom</li>
+            <li>Solde BuckUTT</li>
+            <li>Informations bancaires : IBAN, BIC</li>
+          </ul>
+        </p>
         <h3 className={styles.subArticleTitle}>3.4. Informations relatives aux cookies</h3>
         <p>
           Nous utilisons des cookies afin d'obtenir des statistiques sur notre site web. Ces informations ne seront en

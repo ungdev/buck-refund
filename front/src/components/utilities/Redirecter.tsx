@@ -25,6 +25,7 @@ const redirectionRules: RouteRedirectionRules = {
     { condition: (state) => !state.loggedIn, redirectTo: '/login' },
     { condition: (state) => state.loggedIn && state.administrate, redirectTo: '/admin' },
   ],
+  '/magic': [{ condition: (state) => state.loggedIn, redirectTo: '/' }],
 };
 
 export default function Redirecter() {

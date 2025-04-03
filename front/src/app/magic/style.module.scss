@@ -3,10 +3,30 @@
 .loginPage {
   width: 100%;
   height: 100%;
+  position: relative;
   background-color: $background-dark;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .mod {
+    justify-content: center;
+    padding: 30px 50px;
+    background-color: $background-light;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 1200px;
+
+    > * {
+      display: block;
+      margin: 0.5em 0;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      color: $background-dark;
+    }
+  }
 }
 
 .bottomNotes {
