@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
+import { randomUUID } from 'crypto';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigModule } from '../config/config.module';
 import AuthSignInReqDto from './dto/req/auth-sign-in-req.dto';
@@ -86,6 +87,7 @@ export class AuthService {
     try {
       const link = await this.prisma.magicLink.create({
         data: {
+          token: randomUUID(),
           user: {
             connect: {
               email,
