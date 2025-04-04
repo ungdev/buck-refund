@@ -1,5 +1,4 @@
 'use client';
-import '@/global.d';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import { ReactNode, useEffect } from 'react';

@@ -11,5 +11,6 @@ next-env.d.ts
 .env.prod
 *.pem
 *.mjs
+!eslint.config.mjs
 *.xml
 *.patch

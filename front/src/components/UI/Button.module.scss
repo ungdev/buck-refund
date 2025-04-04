@@ -1,4 +1,5 @@
-@import '@/variables';
+@use '@/variables' as *;
+@use 'sass:color';
 
 .button.noStyle {
   background: none;
@@ -29,7 +30,7 @@
   }
 
   &:disabled {
-    background-color: grayscale($buck-light-green);
+    background-color: color.grayscale($buck-light-green);
     cursor: not-allowed;
   }
 }
