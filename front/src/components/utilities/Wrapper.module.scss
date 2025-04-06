@@ -1,9 +1,9 @@
 @use '@/variables' as *;
 
 .page {
+  @include background;
   width: 100%;
   height: 100%;
   overflow: scroll;
-  background-color: #fafbfc;
   position: relative;
 }

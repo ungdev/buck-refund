@@ -1,15 +1,16 @@
 'use client';
 
-import { useAppTranslation } from '@/lib/i18n';
 import styles from './style.module.scss';
+import { useEffect, useState } from 'react';
+import { useAppTranslation } from '@/lib/i18n';
 import { usePageSettings } from '@/module/pageSettings';
 import { useConnectedUser } from '@/module/user';
-import Link from '@/components/UI/Link';
-import { useEffect, useState } from 'react';
 import { API, useAPI } from '@/api/api';
 import Input from '@/components/UI/Input';
 import TextArea from '@/components/UI/TextArea';
 import Button from '@/components/UI/Button';
+import AppModal from '@/components/toplevel/AppModal';
+import Icons from '@/icons';
 
 function str2ab(str: string) {
   const buf = new ArrayBuffer(str.length);
@@ -127,73 +128,67 @@ export default function AdminPage() {
   };
 
   return (
-    <div className={styles.page}>
-      <div className={styles.mod}>
-        <div className={styles.title}>
-          {t('common:dashboard.hi')}{' '}
-          <span className={styles.bluePart}>
-            <span className={styles.nope}>{user?.firstName}</span>
-          </span>{' '}
-          🐩
-        </div>
-        {hasLoaded ? (
-          hasSettingsOpen ? (
-            <div className={styles.margin}>
-              <Input
-                className={[!status.debtor_name ? styles.required : '', styles.in].join(' ')}
-                value={debtorName}
-                placeholder={t('common:admin.placeholder_debtor_name')}
-                onChange={setDebtorName}
-              />
-              <Input
-                className={[!status.debtor_iban ? styles.required : '', styles.in].join(' ')}
-                value={debtorIban}
-                placeholder={t('common:admin.placeholder_debtor_iban')}
-                onChange={setDebtorIban}
-              />
-              <Input
-                className={[!status.debtor_bic ? styles.required : '', styles.in].join(' ')}
-                value={debtorBic}
-                placeholder={t('common:admin.placeholder_debtor_bic')}
-                onChange={setDebtorBic}
-              />
-              <Input
-                className={[!status.debtor_address ? styles.required : '', styles.in].join(' ')}
-                value={debtorAddr1}
-                placeholder={t('common:admin.placeholder_debtor_addr_1')}
-                onChange={setDebtorAddr1}
-              />
-              <Input
-                className={[!status.debtor_address ? styles.required : '', styles.in].join(' ')}
-                value={debtorAddr2}
-                placeholder={t('common:admin.placeholder_debtor_addr_2')}
-                onChange={setDebtorAddr2}
-              />
-              <Button onClick={submitSettings}>{t('common:admin.placeholder_configure')}</Button>
-            </div>
-          ) : (
-            <div className={styles.margin}>
-              <TextArea
-                placeholder={t('common:admin.private_key')}
-                buttonText={t('common:admin.generate')}
-                onChange={setPrivateKey}
-                value={privateKey}
-                onEnter={() => downloadReport(api, privateKey)}
-              />
-            </div>
-          )
+    <AppModal>
+      <div className={styles.title}>
+        {t('common:dashboard.hi')}{' '}
+        <span className={styles.bluePart}>
+          <span className={styles.nope}>{user?.firstName}</span>
+        </span>{' '}
+        🐩
+      </div>
+      {hasLoaded ? (
+        hasSettingsOpen ? (
+          <div className={styles.margin}>
+            <Input
+              className={[!status.debtor_name ? styles.required : '', styles.in].join(' ')}
+              value={debtorName}
+              placeholder={t('common:admin.placeholder_debtor_name')}
+              onChange={setDebtorName}
+            />
+            <Input
+              className={[!status.debtor_iban ? styles.required : '', styles.in].join(' ')}
+              value={debtorIban}
+              placeholder={t('common:admin.placeholder_debtor_iban')}
+              onChange={setDebtorIban}
+            />
+            <Input
+              className={[!status.debtor_bic ? styles.required : '', styles.in].join(' ')}
+              value={debtorBic}
+              placeholder={t('common:admin.placeholder_debtor_bic')}
+              onChange={setDebtorBic}
+            />
+            <Input
+              className={[!status.debtor_address ? styles.required : '', styles.in].join(' ')}
+              value={debtorAddr1}
+              placeholder={t('common:admin.placeholder_debtor_addr_1')}
+              onChange={setDebtorAddr1}
+            />
+            <Input
+              className={[!status.debtor_address ? styles.required : '', styles.in].join(' ')}
+              value={debtorAddr2}
+              placeholder={t('common:admin.placeholder_debtor_addr_2')}
+              onChange={setDebtorAddr2}
+            />
+            <Button onClick={submitSettings}>{t('common:admin.placeholder_configure')}</Button>
+          </div>
         ) : (
-          <div className={styles.loading}>{t('common:admin.loading')}</div>
-        )}
-      </div>
-      <div className={styles.bottomNotes}>
-        <div>© 2025 UTT NET GROUP</div>
-        <div>BuckUTT</div>
-        <div>BDE UTT</div>
-        <Link className={styles.bottomLink} href={'/legal'}>
-          {t('common:legals')}
-        </Link>
-      </div>
-    </div>
+          <div className={styles.margin}>
+            <TextArea
+              placeholder={t('common:admin.private_key')}
+              buttonText={t('common:admin.generate')}
+              onChange={setPrivateKey}
+              value={privateKey}
+              onEnter={() => !!privateKey && downloadReport(api, privateKey)}
+            />
+            <Button className={styles.configure} onClick={() => setSettingsOpen(true)}>
+              <Icons.CircleWarning />
+              {t('common:admin.configure')}
+            </Button>
+          </div>
+        )
+      ) : (
+        <div className={styles.loading}>{t('common:admin.loading')}</div>
+      )}
+    </AppModal>
   );
 }

@@ -1,9 +1,9 @@
 @use '@/variables' as *;
 
 .authForm {
+  @include box-light;
   justify-content: center;
   padding: 50px 50px 30px;
-  background-color: $background-light;
   border-radius: 20px;
   text-align: center;
 
@@ -12,6 +12,7 @@
   }
 
   .logo {
+    @include logo-filter;
     height: 100px;
     margin: auto;
   }
@@ -22,20 +23,19 @@
 
   .title {
     font-size: 2rem;
-    color: $background-dark;
+    @include text-dark;
 
     .bluePart {
-      color: $buck-light-green;
+      @include blue-part;
     }
   }
 
   .error {
+    @include box-error;
     display: block;
-    background-color: $error-background;
-    color: $error-text;
     padding: 0.5em;
     border-radius: 5px;
-    border: 1px solid $error-text;
+    border: 1px solid currentColor;
     margin-bottom: 20px;
   }
 

@@ -52,4 +52,6 @@ export default {
   'admin.placeholder_debtor_addr_1': 'Adresse du débiteur (ligne 1)',
   'admin.placeholder_debtor_addr_2': 'Adresse du débiteur (ligne 2)',
   'admin.placeholder_configure': 'Configurer',
+  'admin.configure': "Editer la configuration de l'export",
+  'legals.back': 'Retourner au site',
 } as const;

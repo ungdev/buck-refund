@@ -1,15 +1,13 @@
 @use '@/variables' as *;
 
 .inputWrapper {
+  @include area-box;
   display: flex;
   border-radius: 10px;
-  border: 3px solid #d3d3d3;
-  background-color: #d3d3d3;
   flex-flow: column nowrap;
 
   textarea {
-    background-color: #f0f0f2;
-    color: #444c5f;
+    @include area-input-box;
     border-radius: 7px;
     padding: 10px 15px;
     border: none;
@@ -23,26 +21,26 @@
   }
 
   svg {
+    @include text-accent;
     height: 100%;
     width: 40px;
     padding: 5px 8px 5px 11px;
-    color: $buck-light-green;
   }
 
   &:focus-within {
-    background-color: $buck-light-green;
-    border-color: $buck-light-green;
+    @include input-accent-box;
 
     textarea {
-      color: $buck-light-green;
+      @include text-accent;
     }
 
     svg {
-      color: #f0f0f2;
+      @include input-icon-color;
     }
   }
 
   .inline_validate {
+    @include text-dark;
     margin: 0.5em;
     width: 100%;
     cursor: pointer;

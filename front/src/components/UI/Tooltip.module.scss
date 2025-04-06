@@ -6,8 +6,8 @@
   cursor: help;
 
   & > .tooltip {
+    @include box-accent;
     display: none;
-    background-color: $buck-light-green;
     position: absolute;
     left: calc(100% + 1.5ch);
     top: calc(50% + 0.1em);
@@ -18,15 +18,14 @@
     font-size: small;
     font-weight: bold;
     text-align: initial;
-    color: $background-dark;
     text-wrap: nowrap;
 
     &::before {
+      @include tooltip-caret;
       content: '';
       width: 0;
       height: 0;
       border-top: 5px solid transparent;
-      border-right: 7px solid $buck-light-green;
       border-bottom: 5px solid transparent;
       left: -6px;
       position: absolute;

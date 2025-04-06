@@ -1,13 +1,217 @@
-$buck-light-green: #52dd6c;
-$buck-light-blue: #91dbe5;
-$buck-dark-blue: #07478a;
-$background-light: #e3e3e4;
-$background-dark: #434549;
+@use 'sass:color';
 
-$error-background: #e2bebe;
-$error-text: #a80808;
-$valid-text: #0a7d0a;
-$valid-background: #9fc09f;
+$color1: #52dd6c;
+$color2: #91dbe5;
+$color3: #07478a;
+$color4: #e3e3e4;
+$color5: #292929;
+$color6: #fff;
+$color7: #e2bebe;
+$color8: #a80808;
+$color9: #0a7d0a;
+$color10: #9fc09f;
+$color11: #ffa21a;
+$color12: #808080;
+$color13: #1b1b1b;
+$color14: color.scale($color4, $lightness: -5%);
+$color15: color.scale($color4, $lightness: -10%);
+$color16: color.scale($color5, $lightness: -5%);
+$color17: color.scale($color5, $lightness: -10%);
 
 // FONTS :
 $lexend: var(--font-lexend);
+
+@mixin blue-part {
+  color: $color1;
+  @at-root [data-theme='x'] & {
+    color: $color13;
+    background-color: $color11;
+    border-radius: 5px;
+    padding: 0.1em;
+    margin-left: 0.1em;
+  }
+}
+
+@mixin button($type) {
+  @if $type == 'blue' {
+    --background: #{$color1};
+    --color: $color6;
+    @at-root [data-theme='x'] & {
+      --background: #{$color11};
+    }
+  } @else {
+    --background: $color6;
+    --color: #{$color3};
+    @at-root [data-theme='x'] & {
+      --color: #{$color12};
+    }
+  }
+}
+
+@mixin disabled {
+  background-color: color.grayscale($color1);
+  color: $color6;
+  @at-root [data-theme='x'] & {
+    background-color: color.grayscale($color11);
+    color: $color6;
+  }
+}
+
+@mixin ctx-button {
+  background-color: $color3;
+  color: $color6;
+  @at-root [data-theme='x'] & {
+    background-color: $color11;
+    color: $color6;
+  }
+}
+
+@mixin text-dark {
+  color: $color5;
+  @at-root [data-theme='x'] & {
+    color: $color6;
+  }
+}
+
+@mixin text-accent {
+  color: $color1;
+  @at-root [data-theme='x'] & {
+    color: $color11;
+  }
+}
+
+@mixin text-blue {
+  color: $color3;
+  @at-root [data-theme='x'] & {
+    color: $color12;
+  }
+}
+
+@mixin text-valid {
+  color: $color9;
+  @at-root [data-theme='x'] & {
+    color: $color10;
+  }
+}
+
+@mixin text-error {
+  color: $color8;
+  @at-root [data-theme='x'] & {
+    color: $color7;
+  }
+}
+
+@mixin logo-filter {
+  @at-root [data-theme='x'] & {
+    filter: grayscale(1) invert(1) saturate(100%) sepia(91%) saturate(1914%) hue-rotate(338deg) brightness(100%)
+      contrast(101%);
+  }
+}
+
+@mixin box-light {
+  background-color: $color4;
+  color: $color5;
+  @at-root [data-theme='x'] & {
+    background-color: $color5;
+    color: $color6;
+  }
+}
+
+@mixin box-accent {
+  background-color: $color1;
+  color: $color5;
+  @at-root [data-theme='x'] & {
+    background-color: $color11;
+    color: $color6;
+  }
+}
+
+@mixin box-valid {
+  background-color: $color10;
+  color: $color9;
+  @at-root [data-theme='x'] & {
+    background-color: $color9;
+    color: $color10;
+  }
+}
+
+@mixin box-error {
+  background-color: $color7;
+  color: $color8;
+  @at-root [data-theme='x'] & {
+    background-color: $color8;
+    color: $color7;
+  }
+}
+
+@mixin tooltip-caret {
+  border-right: 7px solid $color1;
+  @at-root [data-theme='x'] & {
+    border-right: 7px solid $color11;
+  }
+}
+
+@mixin input-box {
+  background-color: $color14;
+  border: 3px solid $color15;
+  color: $color5;
+  @at-root [data-theme='x'] & {
+    background-color: $color16;
+    border: 3px solid $color17;
+    color: $color6;
+  }
+}
+
+@mixin input-accent-box {
+  background-color: $color1;
+  border-color: $color1;
+  @at-root [data-theme='x'] & {
+    background-color: $color11;
+    border-color: $color11;
+  }
+}
+
+@mixin input-icon-color {
+  color: $color14;
+  @at-root [data-theme='x'] & {
+    color: $color16;
+  }
+}
+
+@mixin area-box {
+  background-color: $color15;
+  border: 3px solid $color15;
+  @at-root [data-theme='x'] & {
+    background-color: $color17;
+    border: 3px solid $color17;
+  }
+}
+
+@mixin area-input-box {
+  background-color: $color14;
+  color: $color5;
+  @at-root [data-theme='x'] & {
+    background-color: $color16;
+    color: $color6;
+  }
+}
+
+@mixin background {
+  background-color: $color5;
+  color: $color6;
+  @at-root [data-theme='x'] & {
+    background-color: $color13;
+    color: $color6;
+  }
+}
+
+@mixin background-bullets {
+  background-color: $color6;
+}
+
+@mixin background-logo {
+  fill: $color4;
+  @at-root [data-theme='x'] & {
+    fill: $color5;
+  }
+}

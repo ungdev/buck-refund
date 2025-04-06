@@ -1,9 +1,14 @@
 'use client';
 import { usePageSettings } from '@/module/pageSettings';
 import styles from './style.module.scss';
+import { useRouter } from 'next/navigation';
+import { useAppTranslation } from '@/lib/i18n';
+import Icons from '@/icons';
 
 export default function LegalPage() {
   usePageSettings({ permissions: 'public', needsLoading: false });
+  const { t } = useAppTranslation();
+  const rt = useRouter();
 
   // Associtation Informations
   const ASSOCIATION_NAME = 'ASS UTT NET GROUP';
@@ -24,6 +29,11 @@ export default function LegalPage() {
   return (
     <div id="legal" className={styles.legal}>
       <div className={styles.container}>
+        <div className={styles.back} onClick={() => rt.back()}>
+          <Icons.LeftArrow />
+          {t('common:legals.back')}
+        </div>
+        <br />
         Cette page a été mise à jour le {LAST_TERMS_UPDATE}.<h1>Mentions légales</h1>
         <p>
           Le site web BuckUTT est développé, maintenu et hébergé par :<br />

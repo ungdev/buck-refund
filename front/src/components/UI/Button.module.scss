@@ -1,5 +1,4 @@
 @use '@/variables' as *;
-@use 'sass:color';
 
 .button.noStyle {
   background: none;
@@ -15,13 +14,11 @@
   color: var(--color);
 
   &.background-blue {
-    --background: #{$buck-light-green};
-    --color: white;
+    @include button('blue');
   }
 
   &.background-white {
-    --background: white;
-    --color: #{$buck-dark-blue};
+    @include button('white');
   }
 
   &:hover {
@@ -30,7 +27,7 @@
   }
 
   &:disabled {
-    background-color: color.grayscale($buck-light-green);
+    @include disabled;
     cursor: not-allowed;
   }
 }

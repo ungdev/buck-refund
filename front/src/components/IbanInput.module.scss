@@ -1,7 +1,9 @@
+@use '@/variables' as *;
+
 .inputWrapper {
   input {
+    @include input-box;
     font-size: 1.1em;
-    border: none;
     appearance: none;
     border-radius: 5px;
     padding: 3px 5px;
@@ -38,14 +40,13 @@
   }
 
   .input_animation {
+    @include input-box;
     font-size: 1.1em;
     border-radius: 5px;
     padding: 3px 5px;
     width: 36ch;
     display: inline-block;
     vertical-align: middle;
-    background-color: #f0f0f2;
-    color: #444c5f;
     font-family:
       Roboto Mono,
       monospace;

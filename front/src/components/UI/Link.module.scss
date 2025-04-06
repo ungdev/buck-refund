@@ -6,10 +6,10 @@
 }
 
 .link:not(.noStyle) {
-  color: $buck-light-green;
+  @include text-accent;
   text-decoration: none;
 
   span {
-    border-bottom: 1px solid $buck-light-green;
+    border-bottom: 1px solid currentColor;
   }
 }
