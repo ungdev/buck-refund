@@ -21,6 +21,6 @@ RUN node_modules/.bin/next build
 
 # Cleaning and pruning
 RUN pnpm install --production --ignore-scripts --prefer-offline
-RUN rm -r tsconfig.json src pnpm-lock.yaml next-env.d.ts .eslint.config.mjs .prettierrc
+RUN rm -r tsconfig.json src pnpm-lock.yaml next-env.d.ts eslint.config.mjs .prettierrc
 
 CMD node_modules/.bin/next start -p ${DEBUCK_FRONT_PORT}
