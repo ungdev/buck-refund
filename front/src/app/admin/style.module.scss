@@ -42,3 +42,17 @@
     vertical-align: text-bottom;
   }
 }
+
+.warn {
+  display: block;
+  @include box-error;
+  padding: 0.5em;
+  border-radius: 5px;
+  border: 1px solid currentColor;
+  margin-top: 20px;
+
+  a {
+    text-decoration: none;
+    border-bottom: 1px solid currentColor;
+  }
+}

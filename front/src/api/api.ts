@@ -34,6 +34,11 @@ type RawResponseType<T> = T extends Date
       }
     : T;
 
+type APIError = {
+  errorCode: number;
+  error: string;
+};
+
 /**
  * The response handler is a class that allows you to handle the response of a request to the API.
  * It allows you to define what to do when the request is successful, when it returns an error (an API error), when it fails (a request error), or when it returns a specific status code or specific failure.
@@ -62,7 +67,7 @@ export class ResponseHandler<T, R = undefined> {
   private readonly handlers: { [status: number]: (body: T) => R | void } & Partial<{
     [status in ResponseError | 'success' | 'error' | 'failure']: status extends 'success'
       ? (body: T) => R | void
-      : () => R | void;
+      : (...args: status extends 'error' ? [error: APIError] : []) => R | void;
   }> = {};
   private readonly promise: Promise<R | void>;
 
@@ -81,15 +86,19 @@ export class ResponseHandler<T, R = undefined> {
       if (response.code < 400) {
         return 'success' in this.handlers ? this.handlers.success!(response.body) : undefined;
       }
-      return 'error' in this.handlers ? this.handlers.error!() : undefined;
+      return 'error' in this.handlers ? this.handlers.error!(response.body as APIError) : undefined;
     });
   }
 
   on<E, P extends number | ResponseError | 'success' | 'error' | 'failure'>(
     statusCode: P,
-    handler: P extends number | 'success' ? (body: T) => E | void : () => E | void,
+    handler: P extends number | 'success'
+      ? (body: T) => E | void
+      : P extends 'error'
+        ? (error: APIError) => E | void
+        : () => E | void,
   ): ResponseHandler<T, R | E> {
-    this.handlers[statusCode] = handler as (body?: T) => R | void;
+    this.handlers[statusCode] = handler as (body?: T | APIError) => R | void;
     return this;
   }
 
@@ -179,7 +188,8 @@ async function internalRequestAPI<RequestType, ResponseType>(
     if (response.status === StatusCodes.NO_CONTENT) {
       return { code: response.status, body: null as ResponseType };
     }
-    if (isFile && method === 'GET') return { code: response.status, body: await response.text() };
+    if (isFile && method === 'GET' && response.status < StatusCodes.BAD_REQUEST)
+      return { code: response.status, body: await response.text() };
     if (!response.headers.get('content-type')?.includes('application/json')) return { error: ResponseError.not_json };
 
     try {

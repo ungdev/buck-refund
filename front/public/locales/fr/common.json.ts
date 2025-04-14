@@ -53,5 +53,7 @@ export default {
   'admin.placeholder_debtor_addr_2': 'Adresse du débiteur (ligne 2)',
   'admin.placeholder_configure': 'Configurer',
   'admin.configure': "Editer la configuration de l'export",
+  'admin.error_decrypt':
+    "Impossible de déchiffrer les données. Vérifie la clé privée et télécharge l'original avant de fermer l'onglet si l'erreur ne disparait pas.",
   'legals.back': 'Retourner au site',
 } as const;

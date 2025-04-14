@@ -1,7 +1,7 @@
 'use client';
 
 import styles from './style.module.scss';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppTranslation } from '@/lib/i18n';
 import { usePageSettings } from '@/module/pageSettings';
 import { useConnectedUser } from '@/module/user';
@@ -52,24 +52,6 @@ async function decryptData(data: string, pemEncodedKey: string): Promise<string>
   return String.fromCodePoint(...new Uint8Array(buffer));
 }
 
-async function downloadReport(api: API, privateKey: string) {
-  api.get<string>('/admin/report', { isFile: true }).on('success', async (xml) => {
-    let xmlString = xml;
-    const encrypted = xml.matchAll(/(?<=<(?<tag>[^<>]+?)>)[^<>]{100,}(?=<\/\k<tag>>)/g);
-    for (const data of encrypted) {
-      const realWorldData = await decryptData(data[0], privateKey);
-      xmlString = xmlString.replaceAll(data[0], realWorldData);
-    }
-    const blob = new Blob([xmlString], { type: 'application/xml' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `buckutt-report-${Date.now()}.xml`;
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-}
-
 type ConfigurationStatus = {
   debtor_iban: boolean;
   debtor_bic: boolean;
@@ -96,7 +78,20 @@ export default function AdminPage() {
     debtor_iban: false,
     debtor_name: false,
   });
+  const [error, setError] = useState('');
   const [hasSettingsOpen, setSettingsOpen] = useState(false);
+  const downloadedData = useRef('');
+  const [downloadedDataLink, setDownloadedDataLink] = useState('');
+
+  useEffect(() => {
+    if (!downloadedData.current) setDownloadedDataLink('');
+    else {
+      const blob = new Blob([downloadedData.current], { type: 'application/xml' });
+      const url = URL.createObjectURL(blob);
+      setDownloadedDataLink(url);
+      return () => URL.revokeObjectURL(url);
+    }
+  }, [downloadedData.current]);
 
   useEffect(() => {
     api.get<ConfigurationStatus>('/admin/config').on('success', (data) => {
@@ -127,6 +122,40 @@ export default function AdminPage() {
     });
   };
 
+  const parseReport = async (xml: string, privateKey: string) => {
+    let xmlString = xml;
+    const encrypted = xml.matchAll(/(?<=<(?<tag>[^<>]+?)>)[^<>]{100,}(?=<\/\k<tag>>)/g);
+    try {
+      for (const data of encrypted) {
+        const realWorldData = await decryptData(data[0], privateKey);
+        xmlString = xmlString.replaceAll(data[0], realWorldData);
+      }
+    } catch {
+      downloadedData.current = xml;
+      setError(t('common:admin.error_decrypt'));
+      return;
+    }
+    setError('');
+    const blob = new Blob([xmlString], { type: 'application/xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `buckutt-report-${Date.now()}.xml`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadReport = async (api: API, privateKey: string) => {
+    if (downloadedData.current) parseReport(downloadedData.current, privateKey);
+    else
+      api
+        .get<string>('/admin/report', { isFile: true })
+        .on('success', (xml) => parseReport(xml, privateKey))
+        .on('error', ({ error }) => {
+          setError(error);
+        });
+  };
+
   return (
     <AppModal>
       <div className={styles.title}>
@@ -136,6 +165,21 @@ export default function AdminPage() {
         </span>{' '}
         🐩
       </div>
+      {error ? (
+        <div className={styles.warn}>
+          {error === t('common:admin.error_decrypt')
+            ? [
+                error.slice(0, error.indexOf('.') + 2),
+                <a href={downloadedDataLink} download={`buckutt-raw-${Date.now()}.xml`} key="link">
+                  {error.slice(error.indexOf('.') + 2, error.indexOf('.', error.indexOf('.') + 1))}
+                </a>,
+                error.slice(error.indexOf('.', error.indexOf('.') + 1)),
+              ]
+            : error}
+        </div>
+      ) : (
+        <></>
+      )}
       {hasLoaded ? (
         hasSettingsOpen ? (
           <div className={styles.margin}>
