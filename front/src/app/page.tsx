@@ -67,7 +67,10 @@ export default function HomePage() {
           <div
             className={[styles.ibanRegistered, user?.paymentMethodRegistered ? styles.true : styles.false].join(' ')}>
             {user?.paymentMethodRegistered
-              ? t('common:dashboard.iban.yes', { last4: user.paymentMethodRegistered })
+              ? t('common:dashboard.iban.yes', {
+                  last4: user.paymentMethodRegistered.iban,
+                  bic: user.paymentMethodRegistered.bic,
+                })
               : t('common:dashboard.iban.no')}
           </div>
         </div>
@@ -86,7 +89,8 @@ export default function HomePage() {
             <IbanInput
               className={styles.iban}
               placeholder={t('common:dashboard.iban.placeholder')}
-              onEnter={async (valid, value) => {
+              bicPlaceholder={t('common:dashboard.bic.placeholder')}
+              onEnter={async (valid, value, bic) => {
                 if (valid === IbanValidity.INVALID) {
                   setIbanErrorMessage(t('common:dashboard.iban.error.invalid'));
                   return;
@@ -96,9 +100,9 @@ export default function HomePage() {
                 const data = await encryptIban(value, lockerResponse.data);
                 dispatch((dispatch) =>
                   api
-                    .put<SetIbanRequestDto, { errorCode?: number }>('/user/iban', { data })
+                    .put<SetIbanRequestDto, { errorCode?: number }>('/user/iban', { data, bic })
                     .on('success', async () => {
-                      dispatch(setIbanRegistered(value));
+                      dispatch(setIbanRegistered(value, bic));
                       setIbanErrorMessage('');
                     })
                     .on(401, (body) =>
@@ -116,7 +120,11 @@ export default function HomePage() {
                 );
               }}
             />
-            <div className={styles.disclaimer}>{t('common:dashboard.disclaimer')}</div>
+            <div className={styles.disclaimer}>
+              <strong>{t('common:dashboard.disclaimer.bic')}</strong>
+              <br />
+              {t('common:dashboard.disclaimer')}
+            </div>
           </>
         ) : (
           <div className={styles.warn}>

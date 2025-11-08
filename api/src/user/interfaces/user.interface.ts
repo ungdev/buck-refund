@@ -10,6 +10,7 @@ const USER_SELECT_FILTER = {
     balance: true,
     iban: true,
     ibanFoolproof: true,
+    bicCode: true,
     locker: true,
     processed: true,
   },

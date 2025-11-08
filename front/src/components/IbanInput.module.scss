@@ -13,6 +13,11 @@
     font-family:
       Roboto Mono,
       monospace;
+
+    &:nth-child(2) {
+      margin-left: 10px;
+      width: 11ch;
+    }
   }
 
   .button {

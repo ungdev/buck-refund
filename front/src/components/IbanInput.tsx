@@ -15,23 +15,27 @@ function IbanInput(
     className = '',
     onEnter = async () => {},
     placeholder,
+    bicPlaceholder,
     autoFocus = false,
   }: {
     className?: string;
     placeholder?: string;
+    bicPlaceholder?: string;
     autoFocus?: boolean;
-    onEnter?: (valid: IbanValidity, value: string) => Promise<void>;
+    onEnter?: (valid: IbanValidity, value: string, bic: string) => Promise<void>;
   },
   ref?: Ref<HTMLInputElement>,
 ) {
   const { t } = useAppTranslation();
   const [iban, setIban] = useState('');
+  const [bic, setBic] = useState('');
   const [loading, setLoading] = useState(false);
   const animationValueRef = useRef('');
   const [animationValue, setAnimationValue] = useState(t('common:dashboard.iban.placeholder'));
 
-  const onEnterProxy = async (valid: IbanValidity, value: string) => {
-    if (valid === IbanValidity.INVALID) return onEnter(valid, value);
+  const onEnterProxy = async (valid: IbanValidity, value: string, bic: string) => {
+    if (valid === IbanValidity.INVALID) return onEnter(valid, value, bic);
+    if (!bic) return onEnter(IbanValidity.INVALID, value, bic);
     animationValueRef.current = value;
     setAnimationValue(value);
     setLoading(true);
@@ -49,9 +53,10 @@ function IbanInput(
       animationValueRef.current = `${animationValueRef.current.slice(0, position)}${chars[Math.floor(Math.random() * chars.length)]}${animationValueRef.current.slice(position + 1)}`;
       setAnimationValue(animationValueRef.current);
     }, 5);
-    await onEnter(valid, value);
+    await onEnter(valid, value, bic);
     clearInterval(intervalId);
     setIban('');
+    setBic('');
     setLoading(false);
   };
 
@@ -59,24 +64,24 @@ function IbanInput(
     const workingIban = iban.toUpperCase().replaceAll(/[^A-Z0-9]/g, '');
 
     // CHECK IBAN LENGTH
-    if (workingIban.length < 14 || workingIban.length > 34) return onEnterProxy(IbanValidity.INVALID, workingIban);
+    if (workingIban.length < 14 || workingIban.length > 34) return onEnterProxy(IbanValidity.INVALID, workingIban, bic);
 
     // IBAN CHECK
-    if (!/^[A-Z]{2}\d{2}/.test(workingIban)) return onEnterProxy(IbanValidity.INVALID, workingIban);
+    if (!/^[A-Z]{2}\d{2}/.test(workingIban)) return onEnterProxy(IbanValidity.INVALID, workingIban, bic);
     const ibanNumeric = BigInt(
       (workingIban.slice(4) + workingIban.slice(0, 4))
         .split('')
         .map((c) => (c >= 'A' && c <= 'Z' ? c.charCodeAt(0) - 55 : c))
         .join(''),
     );
-    if (ibanNumeric % BigInt(97) !== BigInt(1)) return onEnterProxy(IbanValidity.INVALID, workingIban);
+    if (ibanNumeric % BigInt(97) !== BigInt(1)) return onEnterProxy(IbanValidity.INVALID, workingIban, bic);
 
     // BBAN CHECK
     const bban = workingIban.slice(4);
     const countryCode = workingIban.slice(0, 2);
     if (countryCode === 'FR') {
       // FRANCE RIB KEY CHECK
-      if (workingIban.length !== 27) return onEnterProxy(IbanValidity.INVALID, workingIban);
+      if (workingIban.length !== 27) return onEnterProxy(IbanValidity.INVALID, workingIban, bic);
       const numericTransform = (c: string) =>
         c >= 'A' && c <= 'I'
           ? (c.charCodeAt(0) - 64) % 10
@@ -93,10 +98,11 @@ function IbanInput(
       return onEnterProxy(
         computedKey !== bban.slice(-2) ? IbanValidity.INVALID : IbanValidity.IBAN | IbanValidity.BBAN,
         workingIban,
+        bic,
       );
     }
     console.warn(`No BBAN check has been implemented for country code ${countryCode}. Skipping BBAN check.`);
-    return onEnterProxy(IbanValidity.IBAN, workingIban);
+    return onEnterProxy(IbanValidity.IBAN, workingIban, bic);
   };
 
   const ibanify = (iban: string) => {
@@ -110,6 +116,13 @@ function IbanInput(
       raw.splice(i * 4, 0, ' ');
     }
     return raw.join('');
+  };
+
+  const bicify = (bic: string) => {
+    return bic
+      .toUpperCase()
+      .replaceAll(/[^A-Z0-9]/g, '')
+      .slice(0, 11);
   };
 
   return (
@@ -131,6 +144,15 @@ function IbanInput(
           autoFocus={autoFocus}
         />
       )}
+      <input
+        ref={ref}
+        onChange={(v) => setBic(bicify(v.target.value))}
+        onKeyDown={(e) => e.key === 'Enter' && checkValidity()}
+        value={bic}
+        placeholder={bicPlaceholder}
+        type={'text'}
+        autoFocus={autoFocus}
+      />
       <Button className={styles.button} onClick={() => !loading && checkValidity()} disabled={loading}>
         {t(loading ? 'common:dashboard.iban.encrypting' : 'common:dashboard.iban.save')}
         {loading ? <Icons.Loader /> : <Icons.RightChevron />}

@@ -2,7 +2,7 @@ export default class AccessTokenResDto {
   access_token: string;
   firstName: string;
   currentBalance: number;
-  paymentMethodRegistered: string | null;
+  paymentMethodRegistered: { iban: string; bic: string } | null;
   processed: boolean;
   eligible: boolean;
   operation: 'administrate' | 'refund';

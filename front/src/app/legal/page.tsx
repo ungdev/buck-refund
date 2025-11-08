@@ -19,12 +19,12 @@ export default function LegalPage() {
   const ASSOCIATION_EMAIL = 'ung@utt.fr';
 
   // Data Protection Officer
-  const DPO_NAME = 'Camille Moussou';
+  const DPO_NAME = 'Matthieu Tourrette';
   const DPO_EMAIL = 'ung@utt.fr';
 
   // Updates
   const LAST_TERMS_UPDATE = '03/04/2025';
-  const LAST_PRIVACY_POLICY_UPDATE = '03/04/2025';
+  const LAST_PRIVACY_POLICY_UPDATE = '08/11/2025';
 
   return (
     <div id="legal" className={styles.legal}>
@@ -67,8 +67,8 @@ export default function LegalPage() {
             <li>
               Sur la manière dont sont collectées leurs données personnelles. Sont considérées comme des données
               personnelles, toute information permettant d’identifier un utilisateur. A ce titre, il peut s’agir : de
-              ses noms et prénoms, de son âge, de son adresse postale ou email, de sa localisation ou encore de son
-              adresse IP (liste non-exhaustive) ;
+              ses noms et prénoms, de son âge, de son adresse postale ou email, de ses données bancaires, de sa
+              localisation ou encore de son adresse IP (liste non-exhaustive) ;
             </li>
 
             <li>Sur les droits dont ils disposent concernant ces données ;</li>
@@ -158,11 +158,11 @@ export default function LegalPage() {
             </li>
             <li>
               <b>les données renseignées :</b> L'utilisateur est incité à fournir certaines données dans le cadre du
-              fonctionnement du service (IBAN, BIC). Ces données sont modifiables jusqu'à émission du remboursement par
-              l'association BDE UTT.
+              fonctionnement du service (IBAN, BIC). Ces données sont modifiables jusqu'à traitement du remboursement
+              par l'association BDE UTT.
             </li>
             <li>
-              <b>les données de services :</b> Afin d'assurer le bon fonctionnement du service, certaines données
+              <b>les données de service :</b> Afin d'assurer le bon fonctionnement du service, certaines données
               (adresse ip, logs, horodatages) sont collectées. Elles permettent de vérifier la légitimité des actions
               menées sur la plateforme et de pouvoir enquêter sur les évènements anormaux.
             </li>
@@ -183,8 +183,8 @@ export default function LegalPage() {
         <h3 className={styles.subArticleTitle}>3.3. Transmissions des données à un tier</h3>
         <p>
           Certaines informations de l'utilisateur sont transmises à l'association BDE UTT puis à son prestataire
-          bancaire pour permettre le service fourni par l'application. Tout utilisateur ne renseignant pas son IBAN ne
-          verra pas ses données transmises à BDE UTT.
+          bancaire pour permettre le service fourni par l'application. Tout utilisateur ne renseignant pas son IBAN ou
+          son BIC ne verra pas ses données transmises à BDE UTT.
           <br />
           <br />
           Les informations suivantes sont transmises de manière chiffrée à BDE UTT dans le cadre de l'utilisation du

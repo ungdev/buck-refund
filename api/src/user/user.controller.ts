@@ -32,7 +32,7 @@ export default class UsersController {
         (this.config.BALANCE_MIN_VALUE / 100).toLocaleString('fr-FR', { currency: 'EUR', style: 'currency' }),
       );
     if (!this.usersService.isValidIban(data)) throw new AppException(ERROR_CODE.IBAN_INVALID);
-    await this.usersService.setIban(user.id, data);
+    await this.usersService.setIban(user.id, data, dto.bic.toUpperCase());
     return {};
   }
 

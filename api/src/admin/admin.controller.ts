@@ -121,7 +121,7 @@ export class AdminController {
                   },
                   CdtrAgt: {
                     FinInstnId: {
-                      BICFI: { value: 'TOBIC' },
+                      BICFI: { value: user.bicCode },
                     },
                   },
                   Cdtr: {

@@ -24,6 +24,7 @@ export class AdminService {
       where: {
         processed: null,
         iban: { not: null },
+        bicCode: { not: null },
       },
       take: 250,
     });

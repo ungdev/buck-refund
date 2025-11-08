@@ -6,7 +6,10 @@ import { User } from './interfaces/user.interface';
 
 @Injectable()
 export default class UsersService {
-  constructor(private prisma: PrismaService, readonly config: ConfigModule) {}
+  constructor(
+    private prisma: PrismaService,
+    readonly config: ConfigModule,
+  ) {}
 
   public isValidIban(iban: string) {
     const workingIban = iban.toUpperCase().replaceAll(/[^A-Z0-9]/g, '');
@@ -33,10 +36,10 @@ export default class UsersService {
         c >= 'A' && c <= 'I'
           ? (c.charCodeAt(0) - 64) % 10
           : c >= 'J' && c <= 'R'
-          ? (c.charCodeAt(0) - 73) % 10
-          : c >= 'S' && c <= 'Z'
-          ? (c.charCodeAt(0) - 81) % 10
-          : c;
+            ? (c.charCodeAt(0) - 73) % 10
+            : c >= 'S' && c <= 'Z'
+              ? (c.charCodeAt(0) - 81) % 10
+              : c;
       const ribNumeric =
         Number.parseInt(bban.slice(0, 5).split('').map(numericTransform).join('')) * 89 +
         Number.parseInt(bban.slice(5, 10).split('').map(numericTransform).join('')) * 15 +
@@ -47,7 +50,7 @@ export default class UsersService {
     return true;
   }
 
-  async setIban(userId: string, data: string) {
+  async setIban(userId: string, data: string, bic: string) {
     const cryptedIban = publicEncrypt(
       { key: this.config.CRYPTO_PUBLIC_KEY, padding: constants.RSA_PKCS1_OAEP_PADDING, oaepHash: 'sha256' },
       Buffer.from(data, 'utf8'),
@@ -57,6 +60,7 @@ export default class UsersService {
       data: {
         iban: cryptedIban,
         ibanFoolproof: data.slice(-4).padStart(4, 'X'),
+        bicCode: bic,
       },
     } as const);
   }

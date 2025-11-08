@@ -27,6 +27,7 @@ model User {
   processed     DateTime?
   iban          String?     @db.Text
   ibanFoolproof String?     @db.Char(4)
+  bicCode       String?     @db.Char(11)
   locker        String?     @db.Text
   magicLinks    MagicLink[]
 }

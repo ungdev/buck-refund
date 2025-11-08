@@ -50,7 +50,13 @@ export class AuthController {
       access_token: token,
       currentBalance: user.balance,
       firstName: user.firstName,
-      paymentMethodRegistered: user.iban ? user.ibanFoolproof : null,
+      paymentMethodRegistered:
+        user.iban && user.bicCode
+          ? {
+              iban: user.ibanFoolproof,
+              bic: user.bicCode,
+            }
+          : null,
       processed: !!user.processed,
       eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
       operation: user.type === 'ADMIN' ? 'administrate' : 'refund',
@@ -134,7 +140,13 @@ export class AuthController {
       access_token: token,
       currentBalance: user.balance,
       firstName: user.firstName,
-      paymentMethodRegistered: user.iban ? user.ibanFoolproof : null,
+      paymentMethodRegistered:
+        user.iban && user.bicCode
+          ? {
+              iban: user.ibanFoolproof,
+              bic: user.bicCode,
+            }
+          : null,
       processed: !!user.processed,
       eligible: user.balance >= this.config.BALANCE_MIN_VALUE,
       operation: user.type === 'ADMIN' ? 'administrate' : 'refund',

@@ -5,7 +5,7 @@ import { AppThunk } from '@/lib/store';
 export interface UserSlice {
   firstName: string;
   currentBalance: number;
-  paymentMethodRegistered: string | null;
+  paymentMethodRegistered: { iban: string; bic: string } | null;
   processed: boolean;
   eligible: boolean;
   operation: 'administrate' | 'refund';
@@ -27,11 +27,11 @@ export function setUser(user: UserSlice | null): AppThunk {
   };
 }
 
-export function setIbanRegistered(iban: string): AppThunk {
+export function setIbanRegistered(iban: string, bic: string): AppThunk {
   return async (dispatch, getState) => {
     const user = getState().user;
     if (!user) return;
-    dispatch(_setUser({ ...user, paymentMethodRegistered: iban.slice(-4) }));
+    dispatch(_setUser({ ...user, paymentMethodRegistered: { iban: iban.slice(-4), bic } }));
   };
 }
 
