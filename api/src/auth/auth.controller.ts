@@ -88,11 +88,9 @@ export class AuthController {
     if (!authorizationHeader) {
       throw new AppException(ERROR_CODE.NO_TOKEN);
     }
-    const match = new RegExp(/^Bearer\s+(.*)$/).exec(authorizationHeader);
-    if (!match) {
-      throw new AppException(ERROR_CODE.INVALID_TOKEN_FORMAT);
-    }
-    const { valid, id } = this.authService.isTokenValid(match[1]);
+    if (!new RegExp(/^Bearer\s/).test(authorizationHeader)) throw new AppException(ERROR_CODE.INVALID_TOKEN_FORMAT);
+    const match = authorizationHeader.slice(6).trim();
+    const { valid, id } = this.authService.isTokenValid(match);
     const user = id ? await this.authService.getUser(id) : undefined;
     return {
       valid,
