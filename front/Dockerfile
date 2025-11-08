@@ -1,6 +1,7 @@
-FROM node:22
+FROM node:22-alpine
 
 ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
 WORKDIR /srv/app
 
 ARG NEXT_PUBLIC_API_URL=/api

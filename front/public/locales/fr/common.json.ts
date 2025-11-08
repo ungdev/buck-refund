@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   legals: 'Mentions légales',
   email: 'Adresse email',

@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ConfigModule as NestConfigModule, ConfigService as NestConfigService } from '@nestjs/config';
+import type { SignOptions } from 'jsonwebtoken';
 
 const isTestEnv = process.env.NODE_ENV === 'test';
 
@@ -20,7 +21,7 @@ export class ConfigModule {
   public readonly PAGINATION_PAGE_SIZE: number;
   public readonly DATABASE_URL: string;
   public readonly JWT_SECRET: string;
-  public readonly JWT_EXPIRES_IN: string;
+  public readonly JWT_EXPIRES_IN: SignOptions['expiresIn'];
   public readonly SALT_ROUNDS: number;
   public readonly CRYPTO_PUBLIC_KEY: string;
   public readonly BALANCE_MIN_VALUE: number;
