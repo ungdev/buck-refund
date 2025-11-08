@@ -119,7 +119,11 @@ export class AuthController {
   ): Promise<void> {
     const linkData = await this.authService.generateMagicLink(dto.login, ip || res.socket.remoteAddress);
     if (!linkData) throw new AppException(ERROR_CODE.INVALID_CREDENTIALS);
-    await this.authService.sendMagicLink(dto.login, linkData.code, linkData.name);
+    await this.authService.sendMagicLink(
+      dto.graduationYear ? dto.login.replace('@', `.${dto.graduationYear}@`) : dto.login,
+      linkData.code,
+      linkData.name,
+    );
   }
 
   @HttpCode(HttpStatus.OK)

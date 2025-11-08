@@ -27,11 +27,12 @@ export default function LoginPage() {
   const { t } = useAppTranslation();
   const dispatch = useAppDispatch();
 
-  const requestMagicLink = (email: string) =>
+  const requestMagicLink = (email: string, graduationYear: number | null) =>
     new Promise((res) =>
       api
-        .post<{ login: string }, void>('auth/magic', {
+        .post<{ login: string; graduationYear?: number }, void>('auth/magic', {
           login: email,
+          graduationYear: graduationYear || undefined,
         })
         .on('success', () => res(true))
         .on('error', () => res(false)),
@@ -39,12 +40,13 @@ export default function LoginPage() {
 
   const urlSpell = useSearchParam('spell');
   const [email, setEmail] = useState('');
+  const [graduation, setGraduation] = useState<number | null>(null);
   const [state, setState] = useState(PageState.READY);
 
   const submit = async () => {
     setState(PageState.LOADING);
     // Send the request to the API
-    const result = await requestMagicLink(email);
+    const result = await requestMagicLink(email, graduation);
     setState(result ? PageState.SENT : PageState.ERROR);
     setEmail('');
   };
@@ -93,6 +95,14 @@ export default function LoginPage() {
             onEnter={submit}
             placeholder={t('common:magic_link.placeholder')}
             type="email"
+          />
+          <p>{t('common:login.magic.graduated')}</p>
+          <Input
+            value={`${graduation}`}
+            onChange={(v) => setGraduation(Number(v) || null)}
+            onEnter={submit}
+            placeholder={t('common:login.magic.graduation.placeholder')}
+            type="number"
           />
           <Button onClick={submit} className={styles.button}>
             {t('common:magic_link.send')}

@@ -19,8 +19,11 @@ export default {
   'login.magic.error.2': 'Merci de réessayer plus tard',
   'login.fail.creds': 'Identifiants incorrects',
   'login.fail.other': 'Impossible de se connecter',
-  'magic_link.placeholder': 'Adresse email',
+  'magic_link.placeholder': 'Adresse email (étudiante)',
+  'login.magic.graduation.placeholder': 'Année de diplomation',
   'magic_link.send': 'Envoyer un mail',
+  'login.magic.graduated':
+    'Déjà diplômé·e ? Renseigne ton année de diplomation pour recevoir un code sur ton email de diplômé·e.',
   'dashboard.hi': 'Salut',
   'dashboard.balance': 'Ton solde BuckUTT :',
   'dashboard.iban.yes': 'IBAN enregistré (finissant par {{last4}}, BIC {{bic}})',
