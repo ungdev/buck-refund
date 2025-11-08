@@ -1,4 +1,4 @@
-import { IsIBAN, IsString, MinLength } from 'class-validator';
+import { IsString, MinLength } from 'class-validator';
 
 export default class UserSetIbanDto {
   @IsString()

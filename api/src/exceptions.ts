@@ -184,7 +184,7 @@ export const ErrorData = Object.freeze({
   },
   [ERROR_CODE.MISSING_ENV]: {
     message: 'The environment variable is not configured: %',
-    httpCode: HttpStatus.INTERNAL_SERVER_ERROR,
+    httpCode: HttpStatus.SERVICE_UNAVAILABLE,
   },
 } as const) satisfies Readonly<{
   [error in ERROR_CODE]: {
