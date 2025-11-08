@@ -9,7 +9,7 @@ Pour configurer le service, il suffit de d'assigner les variables d'environnemen
 - DATABASE_URL: l'url de la base de données mariadb/mysql (de type `mysql://user:pw@host:3306/db`)
 - JWT_SECRET: Un secret pour les Json Web Tokens
 - JWT_EXPIRES_IN: La durée de validité des Json Web Tokens (aka. d'une session)
-- CRYPTO*PUBLIC_KEY: La clé publique générée pour le service (clé RSA de longueur 4096, sans passphrase, formats spki et pkcs8). \_La clé privée ne doit en aucun cas être mise sur ce serveur ! C'est au trésorier de la posséder et de l'utiliser sur le front quand il déchiffre un export.*
+- CRYPTO_PUBLIC_KEY: La clé publique générée pour le service (clé RSA de longueur 4096, sans passphrase, formats spki et pkcs8). _La clé privée ne doit en aucun cas être mise sur ce serveur ! C'est au trésorier de la posséder et de l'utiliser sur le front quand il déchiffre un export._
 - BALANCE_MIN_VALUE: Le montant minimal à avoir sur buckutt pour être éligible au remboursement
 - LOCKER_SERVICE_KEY: Un secret pour le service locker
 - FRONT_URL: L'URL du front
