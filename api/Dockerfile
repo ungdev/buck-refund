@@ -11,7 +11,7 @@ RUN pnpm install --frozen-lockfile --production=false
 COPY --chown=node:node ./ ./
 
 # Build app
-RUN pnpm pnpx prisma generate
+RUN pnpm prisma generate
 RUN pnpm build
 
 # Cleaning and pruning
