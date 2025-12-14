@@ -13,12 +13,9 @@ import IbanInput, { IbanValidity } from '@/components/IbanInput';
 import AppModal from '@/components/toplevel/AppModal';
 
 function str2ab(str: string) {
-  const buf = new ArrayBuffer(str.length);
-  const bufView = new Uint8Array(buf);
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
+  const buf = new Uint8Array(str.length);
+  for (let i = 0; i < str.length; i++) buf[i] = str.charCodeAt(i) & 0xff;
+  return buf.buffer;
 }
 
 function importRsaKey(pemContents: string) {

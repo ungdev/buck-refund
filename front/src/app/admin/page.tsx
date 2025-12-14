@@ -16,25 +16,20 @@ import Icons from '@/icons';
 const emojis = ['😴', '🫩', '🤑', '😋', '😜', '🥱'];
 
 function str2ab(str: string) {
-  const buf = new ArrayBuffer(str.length);
-  const bufView = new Uint8Array(buf);
-  for (let i = 0, strLen = str.length; i < strLen; i++) {
-    bufView[i] = str.charCodeAt(i);
-  }
-  return buf;
+  const buf = new Uint8Array(str.length);
+  for (let i = 0; i < str.length; i++) buf[i] = str.charCodeAt(i) & 0xff;
+  return buf.buffer;
 }
 
 function base64ToArrayBuffer(base64: string) {
   const binaryString = atob(base64);
   const bytes = new Uint8Array(binaryString.length);
-  for (let i = 0; i < binaryString.length; i++) {
-    bytes[i] = binaryString.charCodeAt(i);
-  }
+  for (let i = 0; i < binaryString.length; i++) bytes[i] = binaryString.charCodeAt(i) & 0xff;
   return bytes.buffer;
 }
 
 function importRsaKey(pemContents: string) {
-  pemContents = pemContents.replaceAll(/-----[^-]+?-----|\n|\r/g, '');
+  pemContents = pemContents.replaceAll(/-----[^-]+?-----|[^A-Z0-9+/=]/gi, '');
   const binaryDerString = atob(pemContents);
   const binaryDer = str2ab(binaryDerString);
   return window.crypto.subtle.importKey(
@@ -55,14 +50,25 @@ async function decryptData(data: string, pemEncodedKey: string): Promise<string>
   try {
     key = await importRsaKey(pemEncodedKey);
   } catch (e) {
-    throw new AggregateError([e as Error], `[DEBUCK] Error importing RSA key: ${(e as Error).message}`);
+    throw new AggregateError(
+      [e as Error],
+      `[DEBUCK] ${(e as Error).name} while importing RSA key: ${(e as Error).message}`,
+    );
   }
+
+  const ciphertext = base64ToArrayBuffer(data);
+  if (ciphertext.byteLength !== (key.algorithm as RsaHashedKeyGenParams).modulusLength / 8)
+    throw new Error(`[DEBUCK] Ciphertext length ${ciphertext.byteLength} does not match key modulus 512 bytes`);
+
   try {
-    buffer = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, key, base64ToArrayBuffer(data));
+    buffer = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, key, ciphertext);
   } catch (e) {
-    throw new AggregateError([e as Error], `[DEBUCK] Error decrypting data: ${(e as Error).message}`);
+    throw new AggregateError(
+      [e as Error],
+      `[DEBUCK] ${(e as Error).name} while decrypting data: ${(e as Error).message}`,
+    );
   }
-  return String.fromCodePoint(...new Uint8Array(buffer));
+  return new TextDecoder().decode(buffer);
 }
 
 type ConfigurationStatus = {
