@@ -47,8 +47,18 @@ function importRsaKey(pemContents: string) {
 }
 
 async function decryptData(data: string, pemEncodedKey: string): Promise<string> {
-  const key = await importRsaKey(pemEncodedKey);
-  const buffer = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, key, base64ToArrayBuffer(data));
+  let key: CryptoKey;
+  let buffer: ArrayBuffer;
+  try {
+    key = await importRsaKey(pemEncodedKey);
+  } catch (e) {
+    throw new AggregateError([e as Error], `[DEBUCK] Error importing RSA key: ${(e as Error).message}`);
+  }
+  try {
+    buffer = await crypto.subtle.decrypt({ name: 'RSA-OAEP' }, key, base64ToArrayBuffer(data));
+  } catch (e) {
+    throw new AggregateError([e as Error], `[DEBUCK] Error decrypting data: ${(e as Error).message}`);
+  }
   return String.fromCodePoint(...new Uint8Array(buffer));
 }
 
@@ -130,9 +140,10 @@ export default function AdminPage() {
         const realWorldData = await decryptData(data[0], privateKey);
         xmlString = xmlString.replaceAll(data[0], realWorldData);
       }
-    } catch {
+    } catch (e) {
       downloadedData.current = xml;
       setError(t('common:admin.error_decrypt'));
+      console.error(e);
       return;
     }
     setError('');
