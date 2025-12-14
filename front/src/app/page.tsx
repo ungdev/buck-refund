@@ -42,6 +42,8 @@ async function encryptIban(iban: string, pemEncodedKey: string): Promise<string>
   return btoa(String.fromCodePoint(...new Uint8Array(buffer)));
 }
 
+const emojis = ['😴', '🫩', '👋', '🫰', '🫶', '🥱'];
+
 export default function HomePage() {
   usePageSettings({ needsLoading: false });
   const { t } = useAppTranslation();
@@ -53,7 +55,8 @@ export default function HomePage() {
   return (
     <AppModal>
       <div className={styles.title}>
-        {t('common:dashboard.hi')} <span className={styles.bluePart}>{user?.firstName}</span> 👋
+        {t('common:dashboard.hi')} <span className={styles.bluePart}>{user?.firstName}</span>{' '}
+        {emojis[Math.floor(Date.now() / (4 * 3_600_000)) % 6]}
       </div>
       <div className={user?.processed ? styles.processed : ''}>
         <div className={styles.balance}>

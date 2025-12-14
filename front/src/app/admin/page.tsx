@@ -12,6 +12,9 @@ import Button from '@/components/UI/Button';
 import AppModal from '@/components/toplevel/AppModal';
 import Icons from '@/icons';
 
+// [12pm;4am[ 😴 [4am;8am[ 🫩 [8am;12pm[ 🤑 [12pm;4pm[ 😋 [4pm;8pm[ 😜 [8pm;12am[ 🥱
+const emojis = ['😴', '🫩', '🤑', '😋', '😜', '🥱'];
+
 function str2ab(str: string) {
   const buf = new ArrayBuffer(str.length);
   const bufView = new Uint8Array(buf);
@@ -174,7 +177,7 @@ export default function AdminPage() {
         <span className={styles.bluePart}>
           <span className={styles.nope}>{user?.firstName}</span>
         </span>{' '}
-        🐩
+        {emojis[Math.floor(Date.now() / (4 * 3_600_000)) % 6]}
       </div>
       {error ? (
         <div className={styles.warn}>
